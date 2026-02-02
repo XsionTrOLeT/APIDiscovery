@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSD2 API Discovery - Bank API Inventory</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PSD2 API Discovery</h1>
+            <p class="subtitle">Automated inventory of PSD2-compatible banking APIs</p>
+        </header>
+
+        <main>
+            <!-- URL Input Section -->
+            <section class="input-section">
+                <h2>Enter Bank Website URLs</h2>
+                <p class="help-text">Enter one or more bank website URLs to scan for PSD2 APIs. The system will crawl the sites and discover API documentation, endpoints, and specifications.</p>
+
+                <div class="url-input-container">
+                    <div id="url-list">
+                        <div class="url-row">
+                            <input type="url" class="url-input" placeholder="https://developer.example-bank.com" />
+                            <button type="button" class="btn-remove" onclick="removeUrl(this)" title="Remove">×</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="addUrlInput()">+ Add Another URL</button>
+                </div>
+
+                <div class="options-section">
+                    <h3>Scan Options</h3>
+                    <div class="options-grid">
+                        <div class="option">
+                            <label for="max-depth">Max Crawl Depth:</label>
+                            <input type="number" id="max-depth" value="2" min="1" max="5" />
+                            <span class="option-help">How deep to follow links (1-5)</span>
+                        </div>
+                        <div class="option">
+                            <label for="max-pages">Max Pages per Site:</label>
+                            <input type="number" id="max-pages" value="50" min="10" max="200" />
+                            <span class="option-help">Maximum pages to scan per site</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button type="button" class="btn-primary" onclick="startScan()" id="scan-btn">
+                        <span class="btn-text">Import & Scan</span>
+                        <span class="btn-loading" style="display: none;">Scanning...</span>
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="clearAll()">Clear All</button>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="progress-section" id="progress-section" style="display: none;">
+                <h2>Scanning Progress</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <p class="progress-text" id="progress-text">Initializing scan...</p>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="results-section" style="display: none;">
+                <div class="results-header">
+                    <h2>API Inventory Results</h2>
+                    <div class="export-buttons">
+                        <button type="button" class="btn-export" onclick="exportJSON()">Export JSON</button>
+                        <button type="button" class="btn-export" onclick="exportCSV()">Export CSV</button>
+                    </div>
+                </div>
+
+                <!-- Summary Stats -->
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-value" id="total-apis">0</span>
+                        <span class="stat-label">APIs Found</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="total-sites">0</span>
+                        <span class="stat-label">Sites Scanned</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="total-pages">0</span>
+                        <span class="stat-label">Pages Analyzed</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="ais-count">0</span>
+                        <span class="stat-label">AIS APIs</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="pis-count">0</span>
+                        <span class="stat-label">PIS APIs</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="caf-count">0</span>
+                        <span class="stat-label">CAF APIs</span>
+                    </div>
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="filter-controls">
+                    <input type="text" id="search-filter" placeholder="Search APIs..." oninput="filterResults()" />
+                    <select id="type-filter" onchange="filterResults()">
+                        <option value="">All Types</option>
+                        <option value="AIS">AIS (Account Information)</option>
+                        <option value="PIS">PIS (Payment Initiation)</option>
+                        <option value="CAF">CAF (Confirmation of Funds)</option>
+                        <option value="PSD2">PSD2 General</option>
+                    </select>
+                </div>
+
+                <!-- API Table -->
+                <div class="table-container">
+                    <table class="api-table" id="api-table">
+                        <thead>
+                            <tr>
+                                <th>Bank/Provider</th>
+                                <th>API Type</th>
+                                <th>Description</th>
+                                <th>Documentation</th>
+                                <th>Confidence</th>
+                                <th>Source</th>
+                            </tr>
+                        </thead>
+                        <tbody id="api-table-body">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Scan Details -->
+                <div class="scan-details" id="scan-details">
+                    <h3>Scan Details</h3>
+                    <div id="scan-details-content"></div>
+                </div>
+            </section>
+
+            <!-- Error Section -->
+            <section class="error-section" id="error-section" style="display: none;">
+                <h2>Scan Error</h2>
+                <p class="error-message" id="error-message"></p>
+                <button type="button" class="btn-secondary" onclick="resetScan()">Try Again</button>
+            </section>
+        </main>
+
+        <footer>
+            <p>PSD2 API Discovery Tool - For compliance research and API inventory management</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
