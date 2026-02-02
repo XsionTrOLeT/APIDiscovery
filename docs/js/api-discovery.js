@@ -1,64 +1,74 @@
 /**
- * PSD2 API Discovery - Client-Side Discovery Engine
+ * PSD2 API Discovery - Enhanced Client-Side Discovery Engine
  *
- * This module crawls bank websites to discover PSD2-compatible APIs.
- * It runs entirely in the browser using a CORS proxy.
+ * This module crawls bank developer portals to discover PSD2-compatible APIs.
+ * It understands common portal structures like product listings and documentation pages.
  */
 
 class PSD2APIDiscovery {
-    // CORS proxy options (we'll try multiple in case one fails)
+    // CORS proxy options
     static CORS_PROXIES = [
         'https://api.allorigins.win/raw?url=',
         'https://corsproxy.io/?',
+        'https://api.codetabs.com/v1/proxy?quest='
     ];
 
-    // PSD2-related keywords to search for
-    static PSD2_KEYWORDS = {
-        general: [
-            'psd2', 'open banking', 'openbanking', 'api portal', 'developer portal',
-            'api documentation', 'api sandbox', 'tpp', 'third party provider',
-            'berlin group', 'nextgenpsd2', 'stet', 'open bank project',
-            'oauth', 'oauth2', 'openid connect', 'client credentials',
-            'xs2a', 'access to account'
+    // PSD2 API type definitions
+    static API_TYPES = {
+        AIS: {
+            name: 'Account Information Service',
+            keywords: ['account information', 'ais', 'aisp', 'account access', 'balance',
+                      'transaction', 'account list', 'read account', 'get accounts',
+                      'account details', 'account data']
+        },
+        PIS: {
+            name: 'Payment Initiation Service',
+            keywords: ['payment initiation', 'pis', 'pisp', 'initiate payment',
+                      'payment service', 'sepa payment', 'instant payment', 'bulk payment',
+                      'payment submission', 'domestic payment', 'international payment',
+                      'payment request', 'transfer']
+        },
+        CAF: {
+            name: 'Confirmation of Funds',
+            keywords: ['confirmation of funds', 'caf', 'funds confirmation',
+                      'piis', 'card based payment', 'available funds', 'fund check']
+        },
+        OAUTH: {
+            name: 'OAuth/Authentication',
+            keywords: ['oauth', 'authorization', 'authentication', 'token', 'consent',
+                      'openid', 'identity', 'login', 'access token']
+        }
+    };
+
+    // Patterns for detecting product/API listings
+    static PRODUCT_PATTERNS = {
+        // Common CSS classes/IDs for product cards
+        cardSelectors: [
+            '.product-card', '.api-card', '.product-item', '.api-item',
+            '[class*="product"]', '[class*="api-card"]', '[class*="service-card"]',
+            '.card', '.tile', '.listing-item', '.grid-item'
         ],
-        ais: [
-            'account information', 'ais api', 'ais-api', 'account access', 'balance',
-            'transaction history', 'account list', 'aisp',
-            'account information service', 'read account', 'get accounts',
-            '/accounts', '/balances', '/transactions'
+        // Link patterns that lead to API details
+        detailLinkPatterns: [
+            /\/products?\//i, /\/apis?\//i, /\/services?\//i,
+            /\/openbanking\//i, /\/psd2\//i, /\/documentation/i,
+            /\/overview/i, /\/details/i, /\/specification/i
         ],
-        pis: [
-            'payment initiation', 'pis api', 'pis-api', 'pisp', 'initiate payment',
-            'payment service', 'sepa payment', 'instant payment', 'bulk payment',
-            'payment submission', '/payments', '/payment-initiations',
-            'domestic payment', 'international payment'
-        ],
-        caf: [
-            'confirmation of funds', 'caf api', 'caf-api', 'funds confirmation',
-            'piis', 'card based payment', 'fundsconfirmation',
-            '/funds-confirmations', 'available funds'
-        ],
-        technical: [
-            'swagger', 'openapi', 'api specification', 'rest api', 'json api',
-            'postman', 'api reference', 'api explorer', 'try it out',
-            'sandbox environment', 'test environment', 'production api'
+        // Patterns for documentation links
+        docLinkPatterns: [
+            /documentation/i, /docs/i, /api-?reference/i, /specification/i,
+            /swagger/i, /openapi/i, /developer/i, /guide/i
         ]
     };
 
-    // URL patterns that often indicate API documentation
-    static API_URL_PATTERNS = [
-        /\/api/i, /\/developer/i, /\/openbanking/i, /\/psd2/i,
-        /\/portal/i, /\/documentation/i, /\/docs/i, /\/swagger/i,
-        /\/sandbox/i, /\/tpp/i, /\/xs2a/i, /\/oauth/i
-    ];
-
     constructor(options = {}) {
-        this.maxDepth = options.maxDepth || 2;
-        this.maxPages = options.maxPages || 30;
-        this.timeout = options.timeout || 15000;
+        this.maxDepth = options.maxDepth || 3;
+        this.maxPages = options.maxPages || 50;
+        this.timeout = options.timeout || 20000;
         this.proxyIndex = 0;
         this.onProgress = options.onProgress || (() => {});
         this.onLog = options.onLog || (() => {});
+        this.discoveredProducts = new Map();
     }
 
     /**
@@ -70,10 +80,10 @@ class PSD2APIDiscovery {
 
         for (let i = 0; i < urls.length; i++) {
             const url = urls[i];
-            this.onProgress(`Scanning ${url}...`, ((i + 1) / urls.length) * 100);
+            this.onProgress(`Scanning ${url}...`, ((i) / urls.length) * 100);
 
             try {
-                const result = await this.scanWebsite(url);
+                const result = await this.scanPortal(url);
                 scanResults.push(result);
                 allApis.push(...result.apis);
             } catch (error) {
@@ -88,31 +98,39 @@ class PSD2APIDiscovery {
             }
         }
 
+        this.onProgress('Scan complete!', 100);
+
         return {
             totalApisFound: allApis.length,
-            apis: allApis,
+            apis: this.deduplicateApis(allApis),
             scanResults: scanResults,
             scanTimestamp: new Date().toISOString()
         };
     }
 
     /**
-     * Scan a single website for PSD2 APIs
+     * Scan a developer portal for APIs
      */
-    async scanWebsite(startUrl) {
+    async scanPortal(startUrl) {
         const parsedUrl = new URL(startUrl);
         const baseDomain = `${parsedUrl.protocol}//${parsedUrl.hostname}`;
 
+        this.discoveredProducts.clear();
         const visited = new Set();
-        const toVisit = [{ url: startUrl, depth: 0 }];
+        const toVisit = [{ url: startUrl, depth: 0, type: 'listing' }];
         const discoveredApis = [];
-        const apiRelatedPages = [];
         let pagesScanned = 0;
 
         this.onLog(`Starting scan of ${baseDomain}`, 'info');
 
         while (toVisit.length > 0 && pagesScanned < this.maxPages) {
-            const { url: currentUrl, depth } = toVisit.shift();
+            // Prioritize: listing pages first, then detail pages, then doc pages
+            toVisit.sort((a, b) => {
+                const priority = { listing: 0, detail: 1, documentation: 2, other: 3 };
+                return (priority[a.type] || 3) - (priority[b.type] || 3);
+            });
+
+            const { url: currentUrl, depth, type } = toVisit.shift();
 
             if (visited.has(currentUrl) || depth > this.maxDepth) {
                 continue;
@@ -122,37 +140,48 @@ class PSD2APIDiscovery {
             pagesScanned++;
 
             try {
-                this.onLog(`Scanning: ${currentUrl}`, 'info');
-                const pageResult = await this.analyzePage(currentUrl, baseDomain);
+                this.onLog(`[${type}] Scanning: ${currentUrl}`, 'info');
+                const pageData = await this.fetchAndParse(currentUrl);
 
-                if (pageResult.isApiRelated) {
-                    apiRelatedPages.push({
-                        url: currentUrl,
-                        relevanceScore: pageResult.relevanceScore,
-                        keywords: pageResult.keywordsFound
-                    });
+                if (!pageData) continue;
 
-                    // Extract API endpoints from the page
-                    const apis = this.extractApis(pageResult, currentUrl, baseDomain);
-                    discoveredApis.push(...apis);
+                // Analyze the page based on its type
+                if (type === 'listing' || depth === 0) {
+                    // Look for product/API cards on listing pages
+                    const products = this.extractProductListings(pageData, currentUrl, baseDomain);
 
-                    this.onLog(`Found API-related page: ${currentUrl} (score: ${pageResult.relevanceScore.toFixed(2)})`, 'success');
-                }
-
-                // Add new links to visit (prioritize API-related URLs)
-                if (depth < this.maxDepth) {
-                    for (const link of pageResult.links) {
-                        if (!visited.has(link)) {
-                            toVisit.push({ url: link, depth: depth + 1 });
+                    for (const product of products) {
+                        if (!visited.has(product.detailUrl)) {
+                            toVisit.push({
+                                url: product.detailUrl,
+                                depth: depth + 1,
+                                type: 'detail',
+                                productInfo: product
+                            });
                         }
                     }
 
-                    // Sort to prioritize API-related URLs
-                    toVisit.sort((a, b) => {
-                        const aIsApi = this.isApiRelatedUrl(a.url) ? 0 : 1;
-                        const bIsApi = this.isApiRelatedUrl(b.url) ? 0 : 1;
-                        return aIsApi - bIsApi || a.depth - b.depth;
-                    });
+                    if (products.length > 0) {
+                        this.onLog(`Found ${products.length} API products on listing page`, 'success');
+                    }
+                }
+
+                // Extract API information from current page
+                const apis = this.extractApiInfo(pageData, currentUrl, baseDomain, type);
+                discoveredApis.push(...apis);
+
+                if (apis.length > 0) {
+                    this.onLog(`Extracted ${apis.length} API(s) from ${currentUrl}`, 'success');
+                }
+
+                // Find more links to explore
+                if (depth < this.maxDepth) {
+                    const newLinks = this.findRelevantLinks(pageData, currentUrl, baseDomain, visited);
+                    for (const link of newLinks) {
+                        if (!visited.has(link.url)) {
+                            toVisit.push({ url: link.url, depth: depth + 1, type: link.type });
+                        }
+                    }
                 }
 
             } catch (error) {
@@ -160,25 +189,38 @@ class PSD2APIDiscovery {
             }
         }
 
-        // Deduplicate APIs
         const uniqueApis = this.deduplicateApis(discoveredApis);
-
-        this.onLog(`Completed scan of ${baseDomain}: ${uniqueApis.length} APIs found`, 'success');
+        this.onLog(`Completed: Found ${uniqueApis.length} unique API(s)`, 'success');
 
         return {
             url: startUrl,
             status: 'success',
-            pagesScanned: pagesScanned,
-            apiRelatedPages: apiRelatedPages,
+            pagesScanned,
             apis: uniqueApis
         };
     }
 
     /**
-     * Fetch a URL using CORS proxy
+     * Fetch and parse a URL
      */
-    async fetchWithProxy(url) {
-        const proxy = PSD2APIDiscovery.CORS_PROXIES[this.proxyIndex];
+    async fetchAndParse(url) {
+        const html = await this.fetchWithProxy(url);
+        if (!html) return null;
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const textContent = doc.body?.textContent || '';
+
+        return { doc, html, textContent, url };
+    }
+
+    /**
+     * Fetch a URL using CORS proxy with retry logic
+     */
+    async fetchWithProxy(url, retryCount = 0) {
+        const maxRetries = PSD2APIDiscovery.CORS_PROXIES.length;
+        const proxyIndex = (this.proxyIndex + retryCount) % maxRetries;
+        const proxy = PSD2APIDiscovery.CORS_PROXIES[proxyIndex];
         const proxyUrl = proxy + encodeURIComponent(url);
 
         const controller = new AbortController();
@@ -188,7 +230,8 @@ class PSD2APIDiscovery {
             const response = await fetch(proxyUrl, {
                 signal: controller.signal,
                 headers: {
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Accept-Language': 'en-US,en;q=0.5'
                 }
             });
 
@@ -203,9 +246,9 @@ class PSD2APIDiscovery {
             clearTimeout(timeoutId);
 
             // Try next proxy
-            if (this.proxyIndex < PSD2APIDiscovery.CORS_PROXIES.length - 1) {
-                this.proxyIndex++;
-                return this.fetchWithProxy(url);
+            if (retryCount < maxRetries - 1) {
+                this.onLog(`Proxy failed, trying alternative...`, 'info');
+                return this.fetchWithProxy(url, retryCount + 1);
             }
 
             throw error;
@@ -213,213 +256,165 @@ class PSD2APIDiscovery {
     }
 
     /**
-     * Analyze a single page for API-related content
+     * Extract product listings from a page (API cards, product tiles, etc.)
      */
-    async analyzePage(url, baseDomain) {
-        const html = await this.fetchWithProxy(url);
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const textContent = doc.body?.textContent?.toLowerCase() || '';
+    extractProductListings(pageData, currentUrl, baseDomain) {
+        const { doc } = pageData;
+        const products = [];
 
-        // Find keywords
-        const keywordsFound = [];
-        for (const [category, keywords] of Object.entries(PSD2APIDiscovery.PSD2_KEYWORDS)) {
-            for (const keyword of keywords) {
-                if (textContent.includes(keyword.toLowerCase())) {
-                    keywordsFound.push(`${category}:${keyword}`);
+        // Try to find product cards using various selectors
+        for (const selector of PSD2APIDiscovery.PRODUCT_PATTERNS.cardSelectors) {
+            try {
+                const cards = doc.querySelectorAll(selector);
+                for (const card of cards) {
+                    const product = this.parseProductCard(card, currentUrl, baseDomain);
+                    if (product) {
+                        products.push(product);
+                    }
+                }
+            } catch (e) {
+                // Selector might be invalid, continue
+            }
+        }
+
+        // Also look for links that match product/API patterns
+        const links = doc.querySelectorAll('a[href]');
+        for (const link of links) {
+            const href = link.getAttribute('href');
+            const text = link.textContent?.trim();
+
+            if (this.isProductLink(href, text)) {
+                const fullUrl = this.resolveUrl(href, currentUrl);
+                if (fullUrl && fullUrl.startsWith(baseDomain)) {
+                    // Check if we already have this product
+                    const existing = products.find(p => p.detailUrl === fullUrl);
+                    if (!existing) {
+                        products.push({
+                            name: text || 'Unknown API',
+                            detailUrl: fullUrl,
+                            sourceUrl: currentUrl,
+                            apiType: this.detectApiType(text + ' ' + href)
+                        });
+                    }
                 }
             }
         }
 
-        // Calculate relevance score
-        const relevanceScore = this.calculateRelevance(keywordsFound, url);
+        return products;
+    }
 
-        // Extract links
-        const links = this.extractLinks(doc, baseDomain, url);
+    /**
+     * Parse a product card element
+     */
+    parseProductCard(card, currentUrl, baseDomain) {
+        // Find the title
+        const titleEl = card.querySelector('h1, h2, h3, h4, .title, .name, [class*="title"], [class*="name"]');
+        const title = titleEl?.textContent?.trim();
 
-        // Extract potential API documentation URLs
-        const apiDocs = this.findApiDocumentation(doc, baseDomain, url);
+        // Find the link
+        const linkEl = card.querySelector('a[href]') || card.closest('a[href]');
+        const href = linkEl?.getAttribute('href');
 
-        // Extract swagger/OpenAPI specs
-        const swaggerUrls = this.findSwaggerSpecs(doc, html, baseDomain, url);
+        // Find description
+        const descEl = card.querySelector('p, .description, [class*="description"], [class*="desc"]');
+        const description = descEl?.textContent?.trim();
+
+        if (!title && !href) return null;
+
+        const fullUrl = href ? this.resolveUrl(href, currentUrl) : null;
+
+        // Only include if it looks like an API/product
+        const cardText = card.textContent?.toLowerCase() || '';
+        const isApiRelated = this.isApiRelatedContent(cardText);
+
+        if (!isApiRelated && !this.isProductLink(href, title)) return null;
 
         return {
-            url: url,
-            title: doc.title || '',
-            isApiRelated: relevanceScore > 0.2,
-            relevanceScore: relevanceScore,
-            keywordsFound: keywordsFound,
-            links: links,
-            apiDocumentationUrls: apiDocs,
-            swaggerUrls: swaggerUrls,
-            textContent: textContent.substring(0, 5000)
+            name: title || 'Unknown API',
+            description: description || '',
+            detailUrl: fullUrl,
+            sourceUrl: currentUrl,
+            apiType: this.detectApiType(cardText)
         };
     }
 
     /**
-     * Calculate how relevant a page is to PSD2 APIs
+     * Check if a link looks like it leads to a product/API page
      */
-    calculateRelevance(keywordsFound, url) {
-        let score = 0.0;
+    isProductLink(href, text) {
+        if (!href) return false;
 
-        const categoriesFound = new Set(keywordsFound.map(kw => kw.split(':')[0]));
+        const combined = (href + ' ' + (text || '')).toLowerCase();
 
-        if (categoriesFound.has('general')) score += 0.3;
-        if (categoriesFound.has('ais')) score += 0.25;
-        if (categoriesFound.has('pis')) score += 0.25;
-        if (categoriesFound.has('caf')) score += 0.2;
-        if (categoriesFound.has('technical')) score += 0.2;
+        // Check for API-related terms
+        const apiTerms = ['api', 'product', 'service', 'account', 'payment', 'psd2',
+                         'openbanking', 'ais', 'pis', 'oauth', 'documentation'];
 
-        // Bonus for URL patterns
-        if (this.isApiRelatedUrl(url)) score += 0.2;
-
-        return Math.min(score, 1.0);
-    }
-
-    /**
-     * Check if a URL looks like it might be API-related
-     */
-    isApiRelatedUrl(url) {
-        return PSD2APIDiscovery.API_URL_PATTERNS.some(pattern => pattern.test(url));
-    }
-
-    /**
-     * Extract all internal links from a page
-     */
-    extractLinks(doc, baseDomain, currentUrl) {
-        const links = new Set();
-        const baseHostname = new URL(baseDomain).hostname;
-
-        doc.querySelectorAll('a[href]').forEach(a => {
-            try {
-                const href = a.getAttribute('href');
-                if (!href || href.startsWith('#') || href.startsWith('javascript:')) {
-                    return;
-                }
-
-                const fullUrl = new URL(href, currentUrl);
-
-                // Only keep internal links
-                if (fullUrl.hostname === baseHostname) {
-                    // Clean the URL (remove fragments)
-                    fullUrl.hash = '';
-                    links.add(fullUrl.href);
-                }
-            } catch (e) {
-                // Invalid URL, skip
-            }
-        });
-
-        return Array.from(links);
-    }
-
-    /**
-     * Find links to API documentation
-     */
-    findApiDocumentation(doc, baseDomain, currentUrl) {
-        const docLinks = [];
-        const docKeywords = [
-            'documentation', 'docs', 'api reference', 'getting started',
-            'quickstart', 'guide', 'tutorial', 'specification'
-        ];
-
-        doc.querySelectorAll('a[href]').forEach(a => {
-            const linkText = a.textContent?.toLowerCase() || '';
-            const href = a.getAttribute('href')?.toLowerCase() || '';
-
-            for (const keyword of docKeywords) {
-                if (linkText.includes(keyword) || href.includes(keyword)) {
-                    try {
-                        const fullUrl = new URL(a.getAttribute('href'), currentUrl);
-                        docLinks.push({
-                            url: fullUrl.href,
-                            text: a.textContent?.trim(),
-                            type: 'documentation'
-                        });
-                    } catch (e) {
-                        // Invalid URL
-                    }
-                    break;
-                }
-            }
-        });
-
-        return docLinks;
-    }
-
-    /**
-     * Find Swagger/OpenAPI specification URLs
-     */
-    findSwaggerSpecs(doc, html, baseDomain, currentUrl) {
-        const swaggerUrls = new Set();
-
-        // Look for common swagger patterns in the HTML
-        const patterns = [
-            /swagger[.-]?ui/gi,
-            /openapi/gi,
-            /api-?docs/gi,
-            /swagger\.json/gi,
-            /openapi\.json/gi,
-            /openapi\.yaml/gi
-        ];
-
-        for (const pattern of patterns) {
-            const matches = html.match(new RegExp(`["']([^"']*${pattern.source}[^"']*)["']`, 'gi'));
-            if (matches) {
-                for (const match of matches) {
-                    const url = match.replace(/["']/g, '');
-                    try {
-                        const fullUrl = new URL(url, currentUrl);
-                        swaggerUrls.add(fullUrl.href);
-                    } catch (e) {
-                        // Invalid URL
-                    }
-                }
-            }
+        if (apiTerms.some(term => combined.includes(term))) {
+            return true;
         }
 
-        // Look for links with swagger in the text
-        doc.querySelectorAll('a[href]').forEach(a => {
-            const text = a.textContent?.toLowerCase() || '';
-            const href = a.getAttribute('href')?.toLowerCase() || '';
-            if (text.includes('swagger') || href.includes('swagger') ||
-                text.includes('openapi') || href.includes('openapi')) {
-                try {
-                    const fullUrl = new URL(a.getAttribute('href'), currentUrl);
-                    swaggerUrls.add(fullUrl.href);
-                } catch (e) {
-                    // Invalid URL
-                }
-            }
-        });
-
-        return Array.from(swaggerUrls);
+        // Check URL patterns
+        return PSD2APIDiscovery.PRODUCT_PATTERNS.detailLinkPatterns.some(p => p.test(href));
     }
 
     /**
-     * Extract API endpoint information from analyzed page data
+     * Check if content is API-related
      */
-    extractApis(pageResult, sourceUrl, baseDomain) {
-        const apis = [];
-        const apiTypes = this.determineApiTypes(pageResult.keywordsFound);
-        const hostname = new URL(baseDomain).hostname;
+    isApiRelatedContent(text) {
+        const lowerText = text.toLowerCase();
+        const apiKeywords = [
+            'api', 'psd2', 'openbanking', 'open banking', 'account information',
+            'payment initiation', 'oauth', 'authorization', 'rest', 'endpoint',
+            'sandbox', 'production', 'ais', 'pis', 'aisp', 'pisp'
+        ];
+        return apiKeywords.some(kw => lowerText.includes(kw));
+    }
 
-        for (const apiType of apiTypes) {
+    /**
+     * Extract API information from a page
+     */
+    extractApiInfo(pageData, currentUrl, baseDomain, pageType) {
+        const { doc, textContent } = pageData;
+        const apis = [];
+
+        const title = doc.querySelector('h1')?.textContent?.trim() ||
+                     doc.querySelector('title')?.textContent?.trim() ||
+                     'Unknown API';
+
+        const description = this.extractDescription(doc, textContent);
+        const apiType = this.detectApiType(textContent);
+
+        // Only create an API entry if the page seems to be about a specific API
+        if (pageType === 'detail' || pageType === 'documentation' || this.isApiDetailPage(doc, textContent)) {
+
+            // Find documentation URL
+            const docUrl = this.findDocumentationUrl(doc, currentUrl);
+
+            // Find swagger/OpenAPI URL
+            const swaggerUrl = this.findSwaggerUrl(doc, pageData.html, currentUrl);
+
+            // Find version info
+            const version = this.extractVersion(doc, textContent);
+
+            // Find sandbox URL
+            const sandboxUrl = this.findSandboxUrl(doc, currentUrl);
+
             const api = {
-                name: `${hostname} - ${apiType}`,
+                name: this.cleanTitle(title),
                 url: baseDomain,
-                source_page: sourceUrl,
+                source_page: currentUrl,
                 api_type: apiType,
-                description: this.extractDescription(pageResult),
-                version: '',
-                documentation_url: pageResult.apiDocumentationUrls[0]?.url || '',
-                swagger_url: pageResult.swaggerUrls[0] || '',
-                sandbox_url: '',
+                description: description,
+                version: version,
+                documentation_url: docUrl || currentUrl,
+                swagger_url: swaggerUrl,
+                sandbox_url: sandboxUrl,
                 production_url: '',
-                authentication: '',
+                authentication: this.detectAuthMethod(textContent),
                 discovered_at: new Date().toISOString(),
-                confidence_score: pageResult.relevanceScore,
-                keywords_found: pageResult.keywordsFound
+                confidence_score: this.calculateConfidence(pageType, textContent, apiType),
+                keywords_found: this.extractKeywords(textContent)
             };
 
             apis.push(api);
@@ -429,65 +424,302 @@ class PSD2APIDiscovery {
     }
 
     /**
-     * Determine what types of PSD2 APIs are available based on keywords
+     * Check if a page is an API detail page
      */
-    determineApiTypes(keywordsFound) {
-        const types = [];
-        const keywordsStr = keywordsFound.join(' ').toLowerCase();
+    isApiDetailPage(doc, textContent) {
+        const lowerText = textContent.toLowerCase();
 
-        if (keywordsStr.includes('ais') || keywordsStr.includes('account information') || keywordsStr.includes('aisp')) {
-            types.push('AIS');
-        }
-        if (keywordsStr.includes('pis') || keywordsStr.includes('payment initiation') || keywordsStr.includes('pisp')) {
-            types.push('PIS');
-        }
-        if (keywordsStr.includes('caf') || keywordsStr.includes('confirmation of funds') || keywordsStr.includes('piis')) {
-            types.push('CAF');
-        }
+        // Check for typical API documentation patterns
+        const indicators = [
+            'endpoint', 'request', 'response', 'http', 'get ', 'post ', 'put ',
+            'authorization', 'header', 'parameter', 'api reference', 'specification',
+            'sandbox', 'production', 'base url', 'authentication'
+        ];
 
-        // Default to general PSD2 if specific types not found but PSD2 keywords exist
-        if (types.length === 0 && keywordsFound.some(kw => kw.startsWith('general:'))) {
-            types.push('PSD2');
-        }
-
-        return types.length > 0 ? types : ['Unknown'];
+        const matchCount = indicators.filter(i => lowerText.includes(i)).length;
+        return matchCount >= 3;
     }
 
     /**
-     * Extract a brief description from the page content
+     * Detect the API type from content
      */
-    extractDescription(pageResult) {
-        const content = pageResult.textContent || '';
-        const sentences = content.split(/[.!?]/);
+    detectApiType(text) {
+        const lowerText = text.toLowerCase();
 
-        for (const sentence of sentences.slice(0, 20)) {
-            if (['api', 'psd2', 'banking', 'payment', 'account'].some(kw => sentence.includes(kw))) {
-                const cleanSentence = sentence.trim().replace(/\s+/g, ' ').substring(0, 300);
-                if (cleanSentence.length > 20) {
-                    return cleanSentence + '...';
+        for (const [type, config] of Object.entries(PSD2APIDiscovery.API_TYPES)) {
+            if (config.keywords.some(kw => lowerText.includes(kw))) {
+                return type;
+            }
+        }
+
+        return 'PSD2';
+    }
+
+    /**
+     * Extract a clean description
+     */
+    extractDescription(doc, textContent) {
+        // Try meta description first
+        const metaDesc = doc.querySelector('meta[name="description"]')?.getAttribute('content');
+        if (metaDesc && metaDesc.length > 20) {
+            return metaDesc.substring(0, 300);
+        }
+
+        // Try first meaningful paragraph
+        const paragraphs = doc.querySelectorAll('p');
+        for (const p of paragraphs) {
+            const text = p.textContent?.trim();
+            if (text && text.length > 50 && text.length < 500) {
+                if (this.isApiRelatedContent(text)) {
+                    return text.substring(0, 300);
                 }
             }
         }
 
-        return pageResult.title || 'No description available';
+        // Fall back to extracting from text content
+        const sentences = textContent.split(/[.!?]/);
+        for (const sentence of sentences.slice(0, 30)) {
+            const clean = sentence.trim().replace(/\s+/g, ' ');
+            if (clean.length > 30 && clean.length < 300 && this.isApiRelatedContent(clean)) {
+                return clean;
+            }
+        }
+
+        return 'PSD2 Banking API';
+    }
+
+    /**
+     * Find documentation URL on the page
+     */
+    findDocumentationUrl(doc, currentUrl) {
+        const links = doc.querySelectorAll('a[href]');
+
+        for (const link of links) {
+            const href = link.getAttribute('href');
+            const text = link.textContent?.toLowerCase() || '';
+
+            if (PSD2APIDiscovery.PRODUCT_PATTERNS.docLinkPatterns.some(p => p.test(href) || p.test(text))) {
+                return this.resolveUrl(href, currentUrl);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Find Swagger/OpenAPI URL
+     */
+    findSwaggerUrl(doc, html, currentUrl) {
+        // Check for swagger links
+        const links = doc.querySelectorAll('a[href]');
+        for (const link of links) {
+            const href = link.getAttribute('href')?.toLowerCase() || '';
+            const text = link.textContent?.toLowerCase() || '';
+
+            if (href.includes('swagger') || href.includes('openapi') ||
+                text.includes('swagger') || text.includes('openapi') ||
+                href.endsWith('.yaml') || href.endsWith('.json')) {
+                return this.resolveUrl(link.getAttribute('href'), currentUrl);
+            }
+        }
+
+        // Check for embedded swagger URLs in the HTML
+        const swaggerMatch = html.match(/["'](https?:\/\/[^"']*(?:swagger|openapi)[^"']*)["']/i);
+        if (swaggerMatch) {
+            return swaggerMatch[1];
+        }
+
+        return '';
+    }
+
+    /**
+     * Find sandbox URL
+     */
+    findSandboxUrl(doc, currentUrl) {
+        const links = doc.querySelectorAll('a[href]');
+
+        for (const link of links) {
+            const href = link.getAttribute('href')?.toLowerCase() || '';
+            const text = link.textContent?.toLowerCase() || '';
+
+            if (href.includes('sandbox') || text.includes('sandbox') ||
+                text.includes('test environment') || text.includes('try it')) {
+                return this.resolveUrl(link.getAttribute('href'), currentUrl);
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Extract version information
+     */
+    extractVersion(doc, textContent) {
+        // Look for version patterns
+        const versionPatterns = [
+            /version[:\s]+([0-9]+\.[0-9]+(?:\.[0-9]+)?)/i,
+            /v([0-9]+\.[0-9]+(?:\.[0-9]+)?)/i,
+            /api[:\s]+([0-9]+\.[0-9]+(?:\.[0-9]+)?)/i
+        ];
+
+        for (const pattern of versionPatterns) {
+            const match = textContent.match(pattern);
+            if (match) {
+                return match[1];
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Detect authentication method
+     */
+    detectAuthMethod(textContent) {
+        const lowerText = textContent.toLowerCase();
+
+        if (lowerText.includes('oauth 2') || lowerText.includes('oauth2')) {
+            return 'OAuth 2.0';
+        }
+        if (lowerText.includes('oauth')) {
+            return 'OAuth';
+        }
+        if (lowerText.includes('openid connect') || lowerText.includes('oidc')) {
+            return 'OpenID Connect';
+        }
+        if (lowerText.includes('mtls') || lowerText.includes('mutual tls')) {
+            return 'mTLS';
+        }
+        if (lowerText.includes('api key')) {
+            return 'API Key';
+        }
+        if (lowerText.includes('bearer')) {
+            return 'Bearer Token';
+        }
+
+        return '';
+    }
+
+    /**
+     * Extract keywords found on the page
+     */
+    extractKeywords(textContent) {
+        const keywords = [];
+        const lowerText = textContent.toLowerCase();
+
+        for (const [type, config] of Object.entries(PSD2APIDiscovery.API_TYPES)) {
+            for (const keyword of config.keywords) {
+                if (lowerText.includes(keyword)) {
+                    keywords.push(`${type}:${keyword}`);
+                }
+            }
+        }
+
+        // Add general PSD2 keywords
+        const generalKeywords = ['psd2', 'open banking', 'berlin group', 'stet', 'xs2a'];
+        for (const kw of generalKeywords) {
+            if (lowerText.includes(kw)) {
+                keywords.push(`general:${kw}`);
+            }
+        }
+
+        return [...new Set(keywords)];
+    }
+
+    /**
+     * Calculate confidence score
+     */
+    calculateConfidence(pageType, textContent, apiType) {
+        let score = 0.3; // Base score
+
+        if (pageType === 'documentation') score += 0.3;
+        if (pageType === 'detail') score += 0.2;
+
+        if (apiType !== 'PSD2') score += 0.2;
+
+        const indicators = ['endpoint', 'sandbox', 'production', 'authentication', 'api reference'];
+        const matchCount = indicators.filter(i => textContent.toLowerCase().includes(i)).length;
+        score += matchCount * 0.05;
+
+        return Math.min(score, 1.0);
+    }
+
+    /**
+     * Find relevant links to explore
+     */
+    findRelevantLinks(pageData, currentUrl, baseDomain, visited) {
+        const { doc } = pageData;
+        const links = [];
+
+        doc.querySelectorAll('a[href]').forEach(a => {
+            const href = a.getAttribute('href');
+            const text = a.textContent?.toLowerCase() || '';
+
+            const fullUrl = this.resolveUrl(href, currentUrl);
+            if (!fullUrl || !fullUrl.startsWith(baseDomain) || visited.has(fullUrl)) {
+                return;
+            }
+
+            let type = 'other';
+            const hrefLower = href?.toLowerCase() || '';
+
+            if (hrefLower.includes('documentation') || text.includes('documentation') ||
+                hrefLower.includes('docs') || hrefLower.includes('reference')) {
+                type = 'documentation';
+            } else if (hrefLower.includes('product') || hrefLower.includes('api') ||
+                       hrefLower.includes('service') || hrefLower.includes('overview')) {
+                type = 'detail';
+            } else if (this.isApiRelatedContent(text + ' ' + href)) {
+                type = 'detail';
+            }
+
+            if (type !== 'other') {
+                links.push({ url: fullUrl, type });
+            }
+        });
+
+        return links;
+    }
+
+    /**
+     * Clean up a title
+     */
+    cleanTitle(title) {
+        return title
+            .replace(/\s*[-|]\s*.+$/, '') // Remove site name after - or |
+            .replace(/\s+/g, ' ')
+            .trim()
+            .substring(0, 100);
+    }
+
+    /**
+     * Resolve a relative URL
+     */
+    resolveUrl(href, baseUrl) {
+        if (!href) return null;
+        try {
+            return new URL(href, baseUrl).href.split('#')[0];
+        } catch {
+            return null;
+        }
     }
 
     /**
      * Remove duplicate API entries
      */
     deduplicateApis(apis) {
-        const seen = new Set();
-        const unique = [];
+        const seen = new Map();
 
         for (const api of apis) {
-            const key = `${api.url}|${api.api_type}`;
-            if (!seen.has(key)) {
-                seen.add(key);
-                unique.push(api);
+            const key = `${api.name}|${api.api_type}`;
+            const existing = seen.get(key);
+
+            if (!existing || api.confidence_score > existing.confidence_score) {
+                seen.set(key, api);
             }
         }
 
-        return unique;
+        return Array.from(seen.values());
     }
 }
 
