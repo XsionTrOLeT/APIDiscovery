@@ -2,7 +2,7 @@
 
 A web application for discovering and inventorying PSD2-compatible banking APIs from public bank websites.
 
-**Live Demo**: [https://xsionttrolet.github.io/APIDiscovery/](https://xsionttrolet.github.io/APIDiscovery/)
+**Live Demo**: [https://xsiontrolet.github.io/APIDiscovery/](https://xsiontrolet.github.io/APIDiscovery/)
 
 ## Overview
 
@@ -36,7 +36,7 @@ Open `docs/index.html` in your browser - no server required.
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/XsionTrOLeT/APIDiscovery.git
+git clone https://github.com/xsiontrolet/APIDiscovery.git
 cd APIDiscovery
 ```
 
