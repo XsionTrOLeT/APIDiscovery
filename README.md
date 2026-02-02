@@ -2,6 +2,8 @@
 
 A web application for discovering and inventorying PSD2-compatible banking APIs from public bank websites.
 
+**Live Demo**: [https://xsionttrolet.github.io/APIDiscovery/](https://xsionttrolet.github.io/APIDiscovery/)
+
 ## Overview
 
 This tool helps with API compliance automation by:
@@ -20,11 +22,21 @@ This tool helps with API compliance automation by:
 - **Export Options**: Download inventory as JSON or CSV
 - **Filter & Search**: Filter results by API type or search keywords
 
-## Installation
+## Quick Start (GitHub Pages - No Installation)
+
+Simply visit the live demo link above and start scanning bank websites directly in your browser.
+
+## Local Development
+
+### Option 1: Static Version (Client-Side Only)
+
+Open `docs/index.html` in your browser - no server required.
+
+### Option 2: Flask Backend Version
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/XsionTrOLeT/APIDiscovery.git
 cd APIDiscovery
 ```
 
@@ -39,24 +51,24 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Usage
-
-1. Start the application:
+4. Start the application:
 ```bash
 python run.py
 ```
 
-2. Open your browser and navigate to `http://localhost:5000`
+5. Open your browser and navigate to `http://localhost:5000`
 
-3. Enter one or more bank developer portal URLs (e.g., `https://developer.example-bank.com`)
+## Usage
 
-4. Configure scan options:
-   - **Max Crawl Depth**: How deep to follow links (1-5)
+1. Enter one or more bank developer portal URLs (e.g., `https://developer.example-bank.com`)
+
+2. Configure scan options:
+   - **Max Crawl Depth**: How deep to follow links (1-3)
    - **Max Pages per Site**: Maximum pages to scan per website
 
-5. Click "Import & Scan" to start the discovery process
+3. Click "Import & Scan" to start the discovery process
 
-6. Review the results and export as needed
+4. Review the results and export as JSON or CSV
 
 ## API Types Detected
 
@@ -68,31 +80,23 @@ python run.py
 
 ```
 APIDiscovery/
-├── app/
-│   ├── __init__.py      # Flask app factory
-│   └── routes.py        # API routes
-├── static/
-│   ├── css/
-│   │   └── style.css    # Application styles
+├── docs/                      # GitHub Pages static site
+│   ├── index.html
+│   ├── css/style.css
 │   └── js/
-│       └── app.js       # Frontend JavaScript
-├── templates/
-│   └── index.html       # Main HTML template
-├── utils/
+│       ├── api-discovery.js   # Client-side discovery engine
+│       └── app.js             # Frontend application
+├── app/                       # Flask backend (optional)
 │   ├── __init__.py
-│   └── api_discovery.py # API discovery logic
-├── requirements.txt     # Python dependencies
-├── run.py              # Application entry point
+│   └── routes.py
+├── utils/
+│   └── api_discovery.py       # Python discovery module
+├── .github/workflows/
+│   └── deploy.yml             # GitHub Pages deployment
+├── requirements.txt
+├── run.py
 └── README.md
 ```
-
-## API Endpoints
-
-- `GET /` - Main web interface
-- `POST /api/scan` - Start scanning URLs for APIs
-- `POST /api/export/json` - Export inventory as JSON
-- `POST /api/export/csv` - Export inventory as CSV
-- `GET /health` - Health check endpoint
 
 ## Example Output
 
@@ -110,6 +114,14 @@ The tool generates an inventory with the following information for each discover
 | confidence_score | How confident the detection is (0-1) |
 | keywords_found | PSD2 keywords detected on the page |
 | discovered_at | Timestamp of discovery |
+
+## Deployment
+
+The application automatically deploys to GitHub Pages when changes are pushed to the `main` branch. The deployment is handled by GitHub Actions.
+
+To enable GitHub Pages on your fork:
+1. Go to Settings > Pages
+2. Set Source to "GitHub Actions"
 
 ## License
 
