@@ -5,6 +5,7 @@
 // Global state
 let scanResults = null;
 let allApis = [];
+let scanLogs = []; // Store logs for display after scan
 
 /**
  * Add a new URL input field
@@ -53,6 +54,7 @@ function clearAll() {
 
     scanResults = null;
     allApis = [];
+    scanLogs = [];
 }
 
 /**
@@ -126,6 +128,9 @@ async function startScan() {
         return;
     }
 
+    // Clear previous logs
+    scanLogs = [];
+
     if (invalidUrls.length > 0) {
         addLog(`Skipping invalid URLs: ${invalidUrls.join(', ')}`, 'error');
     }
@@ -177,6 +182,7 @@ async function startScan() {
 
     } catch (error) {
         console.error('Scan error:', error);
+        addLog(`Fatal error: ${error.message}`, 'error');
         showError(error.message);
     } finally {
         scanBtn.disabled = false;
@@ -194,15 +200,24 @@ function updateProgress(percent, message) {
 }
 
 /**
- * Add log entry
+ * Add log entry (stores in array and displays in progress log)
  */
 function addLog(message, type = 'info') {
+    const timestamp = new Date().toLocaleTimeString();
+    const logEntry = { timestamp, message, type };
+
+    // Store in array for later display
+    scanLogs.push(logEntry);
+
+    // Display in progress log during scan
     const log = document.getElementById('progress-log');
-    const entry = document.createElement('div');
-    entry.className = `log-entry log-${type}`;
-    entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-    log.appendChild(entry);
-    log.scrollTop = log.scrollHeight;
+    if (log) {
+        const entry = document.createElement('div');
+        entry.className = `log-entry log-${type}`;
+        entry.innerHTML = `<span class="log-timestamp">[${timestamp}]</span> ${escapeHtml(message)}`;
+        log.appendChild(entry);
+        log.scrollTop = log.scrollHeight;
+    }
 }
 
 /**
@@ -212,6 +227,9 @@ function showError(message) {
     document.getElementById('progress-section').style.display = 'none';
     document.getElementById('error-section').style.display = 'block';
     document.getElementById('error-message').textContent = message;
+
+    // Still show logs in error case
+    displayLogsInResults();
 }
 
 /**
@@ -229,6 +247,47 @@ function displayResults() {
 
     // Show scan details
     showScanDetails();
+
+    // Show logs in results section
+    displayLogsInResults();
+}
+
+/**
+ * Display logs in the results section
+ */
+function displayLogsInResults() {
+    const logsContent = document.getElementById('scan-logs-content');
+    if (!logsContent) return;
+
+    logsContent.innerHTML = '';
+
+    if (scanLogs.length === 0) {
+        logsContent.innerHTML = '<div class="log-entry log-info">No logs available.</div>';
+        return;
+    }
+
+    scanLogs.forEach(log => {
+        const entry = document.createElement('div');
+        entry.className = `log-entry log-${log.type}`;
+        entry.innerHTML = `<span class="log-timestamp">[${log.timestamp}]</span> ${escapeHtml(log.message)}`;
+        logsContent.appendChild(entry);
+    });
+}
+
+/**
+ * Toggle logs visibility
+ */
+function toggleLogs() {
+    const logsContent = document.getElementById('scan-logs-content');
+    const toggleBtn = document.getElementById('toggle-logs-btn');
+
+    if (logsContent.classList.contains('collapsed')) {
+        logsContent.classList.remove('collapsed');
+        toggleBtn.textContent = 'Hide Logs';
+    } else {
+        logsContent.classList.add('collapsed');
+        toggleBtn.textContent = 'Show Logs';
+    }
 }
 
 /**
@@ -429,6 +488,20 @@ function exportCSV() {
     const csvString = csvRows.join('\n');
     const blob = new Blob([csvString], { type: 'text/csv' });
     downloadBlob(blob, 'api_inventory.csv');
+}
+
+/**
+ * Export logs as text file
+ */
+function exportLogs() {
+    if (!scanLogs || scanLogs.length === 0) {
+        alert('No logs to export.');
+        return;
+    }
+
+    const logText = scanLogs.map(log => `[${log.timestamp}] [${log.type.toUpperCase()}] ${log.message}`).join('\n');
+    const blob = new Blob([logText], { type: 'text/plain' });
+    downloadBlob(blob, 'scan_logs.txt');
 }
 
 /**
