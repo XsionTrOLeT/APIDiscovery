@@ -325,35 +325,99 @@ async function crawlSite(browser, startUrl, options) {
                     waitUntil: 'networkidle'
                 });
 
-                // Wait for SPA content to load - poll until content is substantial
-                let content = '';
-                let title = '';
-                const maxWaitTime = waitTime;
-                const pollInterval = 2000;
-                let waited = 0;
+                // Wait for SPA content containers to appear
+                const contentSelectors = [
+                    '.markdown-content',
+                    '.api-content',
+                    '.documentation-content',
+                    '.content',
+                    'article',
+                    'main'
+                ];
 
-                while (waited < maxWaitTime) {
-                    await page.waitForTimeout(pollInterval);
-                    waited += pollInterval;
-
-                    content = await page.content();
-                    title = await page.title();
-
-                    // Check if we have substantial content
-                    if (content.length >= minContentLength) {
-                        log(`  Content loaded after ${waited}ms (${content.length} chars)`, 'info');
+                let foundSelector = null;
+                for (const selector of contentSelectors) {
+                    try {
+                        await page.waitForSelector(selector, { timeout: 5000 });
+                        foundSelector = selector;
+                        log(`  Found content container: ${selector}`, 'info');
                         break;
+                    } catch {
+                        // Selector not found, try next
                     }
-
-                    log(`  Waiting for content... ${waited}ms (${content.length} chars)`, 'info');
                 }
 
-                // Final content grab
-                content = await page.content();
-                title = await page.title();
+                // Additional wait for dynamic content to render
+                await page.waitForTimeout(waitTime);
 
-                if (content.length < minContentLength) {
-                    log(`  Warning: Content still small after ${maxWaitTime}ms (${content.length} chars)`, 'warning');
+                // Get page title
+                const title = await page.title();
+
+                // Extract content using Playwright's evaluate to get rendered text
+                let content = '';
+                let extractedText = '';
+
+                try {
+                    // Try to get text from specific content containers first
+                    extractedText = await page.evaluate(() => {
+                        const selectors = [
+                            '.markdown-content',
+                            '.api-content',
+                            '.documentation-content',
+                            '.content',
+                            'article',
+                            'main',
+                            'body'
+                        ];
+
+                        for (const selector of selectors) {
+                            const elements = document.querySelectorAll(selector);
+                            if (elements.length > 0) {
+                                let text = '';
+                                elements.forEach(el => {
+                                    // Get text content, including from shadow DOM if present
+                                    text += el.textContent || el.innerText || '';
+                                });
+                                if (text.trim().length > 100) {
+                                    return { selector, text: text.trim() };
+                                }
+                            }
+                        }
+
+                        // Fallback: get all text from body
+                        return {
+                            selector: 'body',
+                            text: document.body.textContent || document.body.innerText || ''
+                        };
+                    });
+
+                    log(`  Extracted text from '${extractedText.selector}': ${extractedText.text.length} chars`, 'info');
+                    content = extractedText.text;
+                } catch (evalError) {
+                    log(`  Error extracting text: ${evalError.message}`, 'error');
+                }
+
+                // Also get full HTML for link extraction
+                const htmlContent = await page.content();
+
+                // If extracted text is still empty, try getting outerHTML of content containers
+                if (content.length < 100) {
+                    log(`  Text extraction returned little content, trying innerHTML...`, 'warning');
+                    try {
+                        content = await page.evaluate(() => {
+                            const selectors = ['.markdown-content', '.content', 'article', 'main', 'body'];
+                            for (const selector of selectors) {
+                                const el = document.querySelector(selector);
+                                if (el && el.innerHTML.length > 100) {
+                                    return el.innerHTML;
+                                }
+                            }
+                            return document.body.innerHTML || '';
+                        });
+                        log(`  innerHTML extraction: ${content.length} chars`, 'info');
+                    } catch (e) {
+                        content = htmlContent;
+                    }
                 }
 
                 pagesScanned++;
@@ -368,7 +432,7 @@ async function crawlSite(browser, startUrl, options) {
 
                 // Extract and queue links if not at max depth
                 if (depth < maxDepth) {
-                    const links = extractLinks(url, content);
+                    const links = extractLinks(url, htmlContent);
                     log(`  Found ${links.length} links on page`, 'info');
 
                     // Prioritize API-related URLs
