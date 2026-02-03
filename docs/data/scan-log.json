@@ -1,112 +1,122 @@
 {
-  "scanDate": "2026-02-03T18:58:37.302Z",
+  "scanDate": "2026-02-03T19:10:51.863Z",
   "urlsScanned": [
     "https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation"
   ],
   "totalApisFound": 0,
   "logs": [
     {
-      "timestamp": "2026-02-03T18:58:16.832Z",
+      "timestamp": "2026-02-03T19:10:32.469Z",
       "message": "Starting PSD2 API Discovery scraper",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:16.833Z",
+      "timestamp": "2026-02-03T19:10:32.470Z",
       "message": "URLs to scan: https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:16.833Z",
+      "timestamp": "2026-02-03T19:10:32.471Z",
       "message": "Loaded 0 existing APIs",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:17.004Z",
+      "timestamp": "2026-02-03T19:10:33.817Z",
       "message": "Starting crawl of https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:17.010Z",
+      "timestamp": "2026-02-03T19:10:33.824Z",
       "message": "Scanning (depth 0): https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:29.702Z",
+      "timestamp": "2026-02-03T19:10:45.160Z",
       "message": "  Page title: \"Documentation\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:29.702Z",
+      "timestamp": "2026-02-03T19:10:45.160Z",
       "message": "  Content length: 3052 chars",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:29.703Z",
+      "timestamp": "2026-02-03T19:10:45.160Z",
       "message": "  Text sample: \"Documentation html, body { font-family: INGMe, arial, helvetica, sans-serif; height: 100%; margin: 0; padding: 0; } /* eslint-disable prefer-template */ /* eslint-disable func-names */ (function () { const basePath = document.querySelector('base').getAttribute('href'); // send users of old MS Edge versions and IE11 to unsupported browser page if ( (/(Trident.*rv:)|MSIE/i.test(navigator.userAgent) && !!window.MSInputMethodContext && !!document.documentMode) || /Edge\\//i.test(navigator.userAgent) ...\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:29.703Z",
-      "message": "  Keyword matches: psd2=0, ais=0, pis=0, caf=0",
+      "timestamp": "2026-02-03T19:10:45.161Z",
+      "message": "  Keyword matches: psd2=0, ais=0, pis=0, caf=0, api_patterns=0",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:29.703Z",
-      "message": "  No PSD2/AIS/PIS/CAF keywords found on this page",
+      "timestamp": "2026-02-03T19:10:45.161Z",
+      "message": "  No API-related keywords found on this page",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T18:58:29.703Z",
+      "timestamp": "2026-02-03T19:10:45.162Z",
+      "message": "  Not enough matches to qualify as API (apiTypes=0, patterns=0)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2026-02-03T19:10:45.162Z",
       "message": "  Found 1 links on page",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:29.704Z",
+      "timestamp": "2026-02-03T19:10:45.162Z",
       "message": "  Queued 1 new links for crawling",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:29.706Z",
+      "timestamp": "2026-02-03T19:10:45.165Z",
       "message": "Scanning (depth 1): https://developer.ing.com/openbanking/",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:37.274Z",
+      "timestamp": "2026-02-03T19:10:51.830Z",
       "message": "  Page title: \"Home\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:37.274Z",
+      "timestamp": "2026-02-03T19:10:51.831Z",
       "message": "  Content length: 3049 chars",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:37.274Z",
+      "timestamp": "2026-02-03T19:10:51.831Z",
       "message": "  Text sample: \"Home html, body { font-family: INGMe, arial, helvetica, sans-serif; height: 100%; margin: 0; padding: 0; } /* eslint-disable prefer-template */ /* eslint-disable func-names */ (function () { const basePath = document.querySelector('base').getAttribute('href'); // send users of old MS Edge versions and IE11 to unsupported browser page if ( (/(Trident.*rv:)|MSIE/i.test(navigator.userAgent) && !!window.MSInputMethodContext && !!document.documentMode) || /Edge\\//i.test(navigator.userAgent) ) { windo...\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:37.275Z",
-      "message": "  Keyword matches: psd2=0, ais=0, pis=0, caf=0",
+      "timestamp": "2026-02-03T19:10:51.831Z",
+      "message": "  Keyword matches: psd2=0, ais=0, pis=0, caf=0, api_patterns=0",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:37.275Z",
-      "message": "  No PSD2/AIS/PIS/CAF keywords found on this page",
+      "timestamp": "2026-02-03T19:10:51.831Z",
+      "message": "  No API-related keywords found on this page",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T18:58:37.275Z",
+      "timestamp": "2026-02-03T19:10:51.831Z",
+      "message": "  Not enough matches to qualify as API (apiTypes=0, patterns=0)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2026-02-03T19:10:51.831Z",
       "message": "  Found 1 links on page",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:37.275Z",
+      "timestamp": "2026-02-03T19:10:51.831Z",
       "message": "  Queued 0 new links for crawling",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T18:58:37.302Z",
+      "timestamp": "2026-02-03T19:10:51.863Z",
       "message": "Saved 0 APIs to /home/runner/work/APIDiscovery/APIDiscovery/docs/data/apis.json",
       "type": "success"
     }
