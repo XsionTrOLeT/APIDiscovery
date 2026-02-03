@@ -102,6 +102,15 @@ function analyzePageContent(url, content, title) {
     const lowerContent = content.toLowerCase();
     const lowerTitle = (title || '').toLowerCase();
 
+    // Log page details for debugging
+    log(`  Page title: "${title || '(no title)'}"`, 'info');
+    log(`  Content length: ${content.length} chars`, 'info');
+
+    // Log a sample of the text content (strip HTML tags)
+    const textContent = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    const textSample = textContent.substring(0, 500);
+    log(`  Text sample: "${textSample}..."`, 'info');
+
     // Count keyword matches
     const keywordMatches = {
         psd2: 0,
@@ -123,6 +132,14 @@ function analyzePageContent(url, content, title) {
                 }
             }
         }
+    }
+
+    // Log keyword matches
+    log(`  Keyword matches: psd2=${keywordMatches.psd2}, ais=${keywordMatches.ais}, pis=${keywordMatches.pis}, caf=${keywordMatches.caf}`, 'info');
+    if (foundKeywords.length > 0) {
+        log(`  Keywords found: ${foundKeywords.join(', ')}`, 'success');
+    } else {
+        log(`  No PSD2/AIS/PIS/CAF keywords found on this page`, 'warning');
     }
 
     // Determine API type based on keyword matches
@@ -161,6 +178,9 @@ function analyzePageContent(url, content, title) {
     if (lowerTitle.includes('api') || lowerTitle.includes('psd2') || lowerTitle.includes('open banking')) {
         confidenceScore = Math.min(confidenceScore + 0.1, 1);
     }
+
+    // Log confidence score
+    log(`  Confidence score: ${Math.round(confidenceScore * 100)}% (threshold: 30%)`, 'info');
 
     // Only report if confidence is reasonable
     if (confidenceScore >= 0.3) {
@@ -221,6 +241,10 @@ function analyzePageContent(url, content, title) {
             keywords_found: foundKeywords.slice(0, 10),
             discovered_at: new Date().toISOString()
         });
+
+        log(`  API detected: ${providerName} ${apiType} API`, 'success');
+    } else {
+        log(`  Confidence too low (${Math.round(confidenceScore * 100)}%), not recording as API`, 'warning');
     }
 
     return apis;
@@ -311,6 +335,7 @@ async function crawlSite(browser, startUrl, options) {
                 // Extract and queue links if not at max depth
                 if (depth < maxDepth) {
                     const links = extractLinks(url, content);
+                    log(`  Found ${links.length} links on page`, 'info');
 
                     // Prioritize API-related URLs
                     const sortedLinks = links.sort((a, b) => {
@@ -321,11 +346,16 @@ async function crawlSite(browser, startUrl, options) {
                         return 0;
                     });
 
+                    let newLinksQueued = 0;
                     for (const link of sortedLinks) {
                         if (!visited.has(link)) {
                             toVisit.push({ url: link, depth: depth + 1 });
+                            newLinksQueued++;
                         }
                     }
+                    log(`  Queued ${newLinksQueued} new links for crawling`, 'info');
+                } else {
+                    log(`  Max depth reached, not following links`, 'info');
                 }
 
             } catch (error) {
