@@ -14,67 +14,40 @@
         </header>
 
         <main>
-            <!-- URL Input Section -->
-            <section class="input-section">
-                <h2>Enter Bank Website URLs</h2>
-                <p class="help-text">Enter one or more bank developer portal URLs to scan for PSD2 APIs. The system will crawl the sites and discover API documentation, endpoints, and specifications.</p>
-
-                <div class="url-input-container">
-                    <div id="url-list">
-                        <div class="url-row">
-                            <input type="url" class="url-input" placeholder="https://developer.example-bank.com" />
-                            <button type="button" class="btn-remove" onclick="removeUrl(this)" title="Remove">&times;</button>
-                        </div>
+            <!-- Data Status Section -->
+            <section class="status-section">
+                <div class="status-header">
+                    <div class="last-updated">
+                        <span class="status-label">Last Updated:</span>
+                        <span id="last-updated-time">Loading...</span>
                     </div>
-                    <button type="button" class="btn-secondary" onclick="addUrlInput()">+ Add Another URL</button>
-                </div>
-
-                <div class="options-section">
-                    <h3>Scan Options</h3>
-                    <div class="options-grid">
-                        <div class="option">
-                            <label for="max-depth">Max Crawl Depth:</label>
-                            <input type="number" id="max-depth" value="2" min="1" max="3" />
-                            <span class="option-help">How deep to follow links (1-3)</span>
-                        </div>
-                        <div class="option">
-                            <label for="max-pages">Max Pages per Site:</label>
-                            <input type="number" id="max-pages" value="30" min="5" max="100" />
-                            <span class="option-help">Maximum pages to scan per site</span>
-                        </div>
-                        <div class="option">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="js-rendering" checked />
-                                <span>Enable JavaScript Rendering</span>
-                            </label>
-                            <span class="option-help">Required for SPA sites (slower but more accurate)</span>
-                        </div>
+                    <div class="action-buttons">
+                        <button type="button" class="btn-primary" onclick="loadData()" id="refresh-btn">
+                            Refresh Data
+                        </button>
+                        <a href="https://github.com/XsionTrOLeT/APIDiscovery/actions/workflows/scrape.yml"
+                           target="_blank"
+                           rel="noopener"
+                           class="btn-secondary">
+                            Run Scan Now (GitHub Actions)
+                        </a>
                     </div>
                 </div>
-
-                <div class="action-buttons">
-                    <button type="button" class="btn-primary" onclick="startScan()" id="scan-btn">
-                        <span class="btn-text">Import &amp; Scan</span>
-                        <span class="btn-loading" style="display: none;">Scanning...</span>
-                    </button>
-                    <button type="button" class="btn-secondary" onclick="clearAll()">Clear All</button>
-                </div>
+                <p class="help-text">
+                    Data is automatically updated hourly via GitHub Actions. Click "Run Scan Now" to trigger an immediate scan.
+                </p>
             </section>
 
-            <!-- Progress Section -->
-            <section class="progress-section" id="progress-section" style="display: none;">
-                <h2>Scanning Progress</h2>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill"></div>
-                </div>
-                <p class="progress-text" id="progress-text">Initializing scan...</p>
-                <div class="progress-log" id="progress-log"></div>
+            <!-- Loading Section -->
+            <section class="loading-section" id="loading-section">
+                <div class="loading-spinner"></div>
+                <p>Loading API inventory...</p>
             </section>
 
             <!-- Results Section -->
             <section class="results-section" id="results-section" style="display: none;">
                 <div class="results-header">
-                    <h2>API Inventory Results</h2>
+                    <h2>API Inventory</h2>
                     <div class="export-buttons">
                         <button type="button" class="btn-export" onclick="exportJSON()">Export JSON</button>
                         <button type="button" class="btn-export" onclick="exportCSV()">Export CSV</button>
@@ -148,18 +121,33 @@
                 <!-- Scan Logs -->
                 <div class="scan-logs" id="scan-logs-section">
                     <div class="scan-logs-header">
-                        <h3>Scan Logs</h3>
-                        <button type="button" class="btn-toggle" onclick="toggleLogs()" id="toggle-logs-btn">Hide Logs</button>
+                        <h3>Last Scan Logs</h3>
+                        <button type="button" class="btn-toggle" onclick="toggleLogs()" id="toggle-logs-btn">Show Logs</button>
                     </div>
-                    <div class="scan-logs-content" id="scan-logs-content"></div>
+                    <div class="scan-logs-content collapsed" id="scan-logs-content"></div>
                 </div>
+            </section>
+
+            <!-- Empty State Section -->
+            <section class="empty-section" id="empty-section" style="display: none;">
+                <h2>No APIs Found Yet</h2>
+                <p class="help-text">
+                    The API inventory is empty. Click "Run Scan Now" to trigger the first scan,
+                    or wait for the scheduled hourly scan to run.
+                </p>
+                <a href="https://github.com/XsionTrOLeT/APIDiscovery/actions/workflows/scrape.yml"
+                   target="_blank"
+                   rel="noopener"
+                   class="btn-primary">
+                    Run Scan Now
+                </a>
             </section>
 
             <!-- Error Section -->
             <section class="error-section" id="error-section" style="display: none;">
-                <h2>Scan Error</h2>
+                <h2>Error Loading Data</h2>
                 <p class="error-message" id="error-message"></p>
-                <button type="button" class="btn-secondary" onclick="resetScan()">Try Again</button>
+                <button type="button" class="btn-secondary" onclick="loadData()">Try Again</button>
             </section>
         </main>
 
@@ -168,7 +156,6 @@
         </footer>
     </div>
 
-    <script src="js/api-discovery.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,65 @@
+name: Scrape PSD2 APIs
+
+on:
+  # Run every hour
+  schedule:
+    - cron: '0 * * * *'
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'Optional: Comma-separated URLs to scan (leave empty to use config)'
+        required: false
+        default: ''
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: scraper/package-lock.json
+
+      - name: Install dependencies
+        working-directory: scraper
+        run: npm ci
+
+      - name: Install Playwright browsers
+        working-directory: scraper
+        run: npx playwright install chromium --with-deps
+
+      - name: Run scraper
+        working-directory: scraper
+        run: |
+          if [ -n "${{ github.event.inputs.urls }}" ]; then
+            node index.js --urls "${{ github.event.inputs.urls }}"
+          else
+            node index.js
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet docs/data/apis.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push results
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/data/apis.json docs/data/scan-log.json
+          git commit -m "Update API inventory - $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push

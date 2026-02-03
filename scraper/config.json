@@ -1,0 +1,21 @@
+{
+  "urls": [
+    "https://developer.ing.com/openbanking/products",
+    "https://developer.abnamro.com/",
+    "https://developer.rabobank.nl/",
+    "https://developer.deutschebank.com/"
+  ],
+  "options": {
+    "maxDepth": 2,
+    "maxPagesPerSite": 30,
+    "timeout": 30000,
+    "waitForSelector": "body",
+    "waitTime": 3000
+  },
+  "keywords": {
+    "psd2": ["psd2", "payment services directive", "open banking", "tpp", "third party provider", "aisp", "pisp", "aspsp"],
+    "ais": ["account information", "ais", "account access", "balance", "transactions", "account data", "read account"],
+    "pis": ["payment initiation", "pis", "initiate payment", "payment service", "sepa payment", "instant payment"],
+    "caf": ["confirmation of funds", "caf", "funds confirmation", "available funds", "fund availability"]
+  }
+}
