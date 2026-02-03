@@ -1,7 +1,7 @@
 name: Scrape PSD2 APIs
 
 on:
-  # Run every hour
+  # Run daily at 2 AM UTC
   schedule:
     - cron: '0 * * * *'
   # Allow manual trigger from GitHub UI
