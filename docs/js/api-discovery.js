@@ -17,21 +17,39 @@ class PSD2APIDiscovery {
     static JS_RENDER_PROXIES = [
         {
             name: 'Microlink',
-            // Microlink renders JS and returns page data
-            buildUrl: (url) => `https://api.microlink.io/?url=${encodeURIComponent(url)}&screenshot=false&meta=false`,
+            // Microlink with prerender to execute JavaScript
+            buildUrl: (url) => `https://api.microlink.io/?url=${encodeURIComponent(url)}&prerender=true&javascript=true&waitForTimeout=5000`,
             parseResponse: async (response) => {
                 const json = await response.json();
                 if (json.status === 'success' && json.data) {
-                    // Microlink returns HTML in data.html or we can use data.content
-                    return json.data.html || json.data.content || '';
+                    // Try to get HTML content from various fields
+                    const html = json.data.html || json.data.content || '';
+                    if (html.length > 0) {
+                        return html;
+                    }
+                    // If no HTML, try to construct from title/description
+                    if (json.data.title || json.data.description) {
+                        return `<html><head><title>${json.data.title || ''}</title></head><body><h1>${json.data.title || ''}</h1><p>${json.data.description || ''}</p></body></html>`;
+                    }
                 }
-                throw new Error(json.message || 'Microlink failed');
+                throw new Error(json.message || 'Microlink returned no content');
             }
         },
         {
-            name: 'WebScraping.ai',
-            // Free tier available
-            buildUrl: (url) => `https://api.webscraping.ai/html?url=${encodeURIComponent(url)}&js_rendering=true`,
+            name: 'AllOrigins-Render',
+            // AllOrigins with format that might work better
+            buildUrl: (url) => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+            parseResponse: async (response) => {
+                const json = await response.json();
+                if (json.contents) {
+                    return json.contents;
+                }
+                throw new Error('AllOrigins returned no content');
+            }
+        },
+        {
+            name: 'CodeTabs',
+            buildUrl: (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
             parseResponse: async (response) => {
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 return await response.text();
@@ -251,14 +269,16 @@ class PSD2APIDiscovery {
             for (let i = 0; i < PSD2APIDiscovery.JS_RENDER_PROXIES.length; i++) {
                 const proxy = PSD2APIDiscovery.JS_RENDER_PROXIES[i];
                 try {
-                    this.onLog(`Trying ${proxy.name} renderer...`, 'info');
+                    this.onLog(`Trying ${proxy.name}...`, 'info');
                     const html = await this.fetchWithJsProxy(url, proxy);
                     if (html && html.length > 500) { // Ensure we got meaningful content
-                        this.onLog(`${proxy.name} succeeded`, 'success');
+                        this.onLog(`${proxy.name} succeeded (${html.length} chars)`, 'success');
                         return html;
+                    } else {
+                        this.onLog(`${proxy.name}: response too short (${html?.length || 0} chars)`, 'info');
                     }
                 } catch (error) {
-                    this.onLog(`${proxy.name} failed: ${error.message}`, 'info');
+                    this.onLog(`${proxy.name} failed: ${error.message}`, 'error');
                 }
             }
         }
