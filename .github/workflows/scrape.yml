@@ -12,6 +12,10 @@ on:
         required: false
         default: ''
 
+# Required for pushing commits back to the repo
+permissions:
+  contents: write
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
