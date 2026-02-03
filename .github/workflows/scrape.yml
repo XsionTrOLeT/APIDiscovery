@@ -1,7 +1,7 @@
 name: Scrape PSD2 APIs
 
 on:
-  # Run every hour
+  # Run daily at 2 AM UTC
   schedule:
     - cron: '0 2 * * *'
   # Allow manual trigger from GitHub UI
@@ -11,6 +11,10 @@ on:
         description: 'Optional: Comma-separated URLs to scan (leave empty to use config)'
         required: false
         default: ''
+
+# Required for pushing commits back to the repo
+permissions:
+  contents: write
 
 jobs:
   scrape:
