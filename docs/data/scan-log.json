@@ -1,122 +1,212 @@
 {
-  "scanDate": "2026-02-03T19:10:51.863Z",
+  "scanDate": "2026-02-03T19:40:29.920Z",
   "urlsScanned": [
     "https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation"
   ],
   "totalApisFound": 0,
   "logs": [
     {
-      "timestamp": "2026-02-03T19:10:32.469Z",
+      "timestamp": "2026-02-03T19:39:44.390Z",
       "message": "Starting PSD2 API Discovery scraper",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:32.470Z",
+      "timestamp": "2026-02-03T19:39:44.391Z",
       "message": "URLs to scan: https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:32.471Z",
+      "timestamp": "2026-02-03T19:39:44.391Z",
       "message": "Loaded 0 existing APIs",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:33.817Z",
+      "timestamp": "2026-02-03T19:39:44.593Z",
       "message": "Starting crawl of https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:33.824Z",
+      "timestamp": "2026-02-03T19:39:44.602Z",
       "message": "Scanning (depth 0): https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:45.160Z",
+      "timestamp": "2026-02-03T19:39:55.902Z",
+      "message": "  Waiting for content... 2000ms (3032 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:39:57.904Z",
+      "message": "  Waiting for content... 4000ms (3032 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:39:59.907Z",
+      "message": "  Waiting for content... 6000ms (3032 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:01.909Z",
+      "message": "  Waiting for content... 8000ms (3032 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:03.913Z",
+      "message": "  Waiting for content... 10000ms (3032 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:05.916Z",
+      "message": "  Waiting for content... 12000ms (3032 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:07.918Z",
+      "message": "  Waiting for content... 14000ms (3032 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:09.921Z",
+      "message": "  Waiting for content... 16000ms (3032 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:09.922Z",
+      "message": "  Warning: Content still small after 15000ms (3032 chars)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:09.923Z",
       "message": "  Page title: \"Documentation\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:45.160Z",
-      "message": "  Content length: 3052 chars",
+      "timestamp": "2026-02-03T19:40:09.923Z",
+      "message": "  Content length: 3032 chars",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:45.160Z",
+      "timestamp": "2026-02-03T19:40:09.923Z",
       "message": "  Text sample: \"Documentation html, body { font-family: INGMe, arial, helvetica, sans-serif; height: 100%; margin: 0; padding: 0; } /* eslint-disable prefer-template */ /* eslint-disable func-names */ (function () { const basePath = document.querySelector('base').getAttribute('href'); // send users of old MS Edge versions and IE11 to unsupported browser page if ( (/(Trident.*rv:)|MSIE/i.test(navigator.userAgent) && !!window.MSInputMethodContext && !!document.documentMode) || /Edge\\//i.test(navigator.userAgent) ...\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:45.161Z",
+      "timestamp": "2026-02-03T19:40:09.924Z",
       "message": "  Keyword matches: psd2=0, ais=0, pis=0, caf=0, api_patterns=0",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:45.161Z",
+      "timestamp": "2026-02-03T19:40:09.924Z",
       "message": "  No API-related keywords found on this page",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T19:10:45.162Z",
+      "timestamp": "2026-02-03T19:40:09.924Z",
       "message": "  Not enough matches to qualify as API (apiTypes=0, patterns=0)",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T19:10:45.162Z",
+      "timestamp": "2026-02-03T19:40:09.924Z",
       "message": "  Found 1 links on page",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:45.162Z",
+      "timestamp": "2026-02-03T19:40:09.924Z",
       "message": "  Queued 1 new links for crawling",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:45.165Z",
+      "timestamp": "2026-02-03T19:40:09.927Z",
       "message": "Scanning (depth 1): https://developer.ing.com/openbanking/",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:51.830Z",
+      "timestamp": "2026-02-03T19:40:15.873Z",
+      "message": "  Waiting for content... 2000ms (3014 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:17.875Z",
+      "message": "  Waiting for content... 4000ms (3014 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:19.877Z",
+      "message": "  Waiting for content... 6000ms (3014 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:21.878Z",
+      "message": "  Waiting for content... 8000ms (3014 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:23.881Z",
+      "message": "  Waiting for content... 10000ms (3014 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:25.882Z",
+      "message": "  Waiting for content... 12000ms (3014 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:27.885Z",
+      "message": "  Waiting for content... 14000ms (3014 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:29.887Z",
+      "message": "  Waiting for content... 16000ms (3014 chars)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:29.889Z",
+      "message": "  Warning: Content still small after 15000ms (3014 chars)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2026-02-03T19:40:29.889Z",
       "message": "  Page title: \"Home\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:51.831Z",
-      "message": "  Content length: 3049 chars",
+      "timestamp": "2026-02-03T19:40:29.889Z",
+      "message": "  Content length: 3014 chars",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:51.831Z",
+      "timestamp": "2026-02-03T19:40:29.889Z",
       "message": "  Text sample: \"Home html, body { font-family: INGMe, arial, helvetica, sans-serif; height: 100%; margin: 0; padding: 0; } /* eslint-disable prefer-template */ /* eslint-disable func-names */ (function () { const basePath = document.querySelector('base').getAttribute('href'); // send users of old MS Edge versions and IE11 to unsupported browser page if ( (/(Trident.*rv:)|MSIE/i.test(navigator.userAgent) && !!window.MSInputMethodContext && !!document.documentMode) || /Edge\\//i.test(navigator.userAgent) ) { windo...\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:51.831Z",
+      "timestamp": "2026-02-03T19:40:29.889Z",
       "message": "  Keyword matches: psd2=0, ais=0, pis=0, caf=0, api_patterns=0",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:51.831Z",
+      "timestamp": "2026-02-03T19:40:29.889Z",
       "message": "  No API-related keywords found on this page",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T19:10:51.831Z",
+      "timestamp": "2026-02-03T19:40:29.889Z",
       "message": "  Not enough matches to qualify as API (apiTypes=0, patterns=0)",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T19:10:51.831Z",
+      "timestamp": "2026-02-03T19:40:29.889Z",
       "message": "  Found 1 links on page",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:51.831Z",
+      "timestamp": "2026-02-03T19:40:29.889Z",
       "message": "  Queued 0 new links for crawling",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T19:10:51.863Z",
+      "timestamp": "2026-02-03T19:40:29.920Z",
       "message": "Saved 0 APIs to /home/runner/work/APIDiscovery/APIDiscovery/docs/data/apis.json",
       "type": "success"
     }
