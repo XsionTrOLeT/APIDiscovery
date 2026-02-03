@@ -1,162 +1,162 @@
 {
-  "scanDate": "2026-02-03T23:15:25.658Z",
+  "scanDate": "2026-02-03T23:23:37.875Z",
   "urlsScanned": [
     "https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation"
   ],
   "totalApisFound": 0,
   "logs": [
     {
-      "timestamp": "2026-02-03T23:14:13.533Z",
+      "timestamp": "2026-02-03T23:22:30.550Z",
       "message": "Starting PSD2 API Discovery scraper",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:13.534Z",
+      "timestamp": "2026-02-03T23:22:30.551Z",
       "message": "URLs to scan: https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:13.534Z",
+      "timestamp": "2026-02-03T23:22:30.551Z",
       "message": "Loaded 0 existing APIs",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:14.865Z",
+      "timestamp": "2026-02-03T23:22:31.088Z",
       "message": "Starting crawl of https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:14.878Z",
+      "timestamp": "2026-02-03T23:22:31.177Z",
       "message": "Scanning (depth 0): https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:25.587Z",
+      "timestamp": "2026-02-03T23:22:38.934Z",
       "message": "  Found content container: .markdown-content",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.591Z",
+      "timestamp": "2026-02-03T23:22:53.943Z",
       "message": "  Extracted text from 'body': 92 chars",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.593Z",
+      "timestamp": "2026-02-03T23:22:53.945Z",
       "message": "  Text extraction returned little content, trying innerHTML...",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.594Z",
+      "timestamp": "2026-02-03T23:22:53.947Z",
       "message": "  innerHTML extraction: 443 chars",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.594Z",
+      "timestamp": "2026-02-03T23:22:53.947Z",
       "message": "  Page title: \"Documentation\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.595Z",
+      "timestamp": "2026-02-03T23:22:53.947Z",
       "message": "  Content length: 443 chars",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.595Z",
+      "timestamp": "2026-02-03T23:22:53.948Z",
       "message": "  Text sample: \"Documentation JavaScript is not supported or not enabled in your browser....\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.596Z",
+      "timestamp": "2026-02-03T23:22:53.949Z",
       "message": "  Keyword matches: psd2=0, ais=0, pis=0, caf=0, api_patterns=0",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.596Z",
+      "timestamp": "2026-02-03T23:22:53.949Z",
       "message": "  No API-related keywords found on this page",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.596Z",
+      "timestamp": "2026-02-03T23:22:53.949Z",
       "message": "  Not enough matches to qualify as API (apiTypes=0, patterns=0)",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.596Z",
+      "timestamp": "2026-02-03T23:22:53.950Z",
       "message": "  Found 1 links on page",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.596Z",
+      "timestamp": "2026-02-03T23:22:53.950Z",
       "message": "  Queued 1 new links for crawling",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:14:40.599Z",
+      "timestamp": "2026-02-03T23:22:53.954Z",
       "message": "Scanning (depth 1): https://developer.ing.com/openbanking/",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:15:10.621Z",
+      "timestamp": "2026-02-03T23:23:22.348Z",
       "message": "  Found content container: main",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.623Z",
+      "timestamp": "2026-02-03T23:23:37.351Z",
       "message": "  Extracted text from 'body': 83 chars",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.625Z",
+      "timestamp": "2026-02-03T23:23:37.353Z",
       "message": "  Text extraction returned little content, trying innerHTML...",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.626Z",
+      "timestamp": "2026-02-03T23:23:37.354Z",
       "message": "  innerHTML extraction: 449 chars",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.626Z",
+      "timestamp": "2026-02-03T23:23:37.354Z",
       "message": "  Page title: \"Home\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.626Z",
+      "timestamp": "2026-02-03T23:23:37.355Z",
       "message": "  Content length: 449 chars",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.626Z",
+      "timestamp": "2026-02-03T23:23:37.355Z",
       "message": "  Text sample: \"Home JavaScript is not supported or not enabled in your browser....\"",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.627Z",
+      "timestamp": "2026-02-03T23:23:37.355Z",
       "message": "  Keyword matches: psd2=0, ais=0, pis=0, caf=0, api_patterns=0",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.627Z",
+      "timestamp": "2026-02-03T23:23:37.355Z",
       "message": "  No API-related keywords found on this page",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.627Z",
+      "timestamp": "2026-02-03T23:23:37.356Z",
       "message": "  Not enough matches to qualify as API (apiTypes=0, patterns=0)",
       "type": "warning"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.627Z",
+      "timestamp": "2026-02-03T23:23:37.356Z",
       "message": "  Found 1 links on page",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.627Z",
+      "timestamp": "2026-02-03T23:23:37.356Z",
       "message": "  Queued 0 new links for crawling",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T23:15:25.658Z",
+      "timestamp": "2026-02-03T23:23:37.875Z",
       "message": "Saved 0 APIs to /home/runner/work/APIDiscovery/APIDiscovery/docs/data/apis.json",
       "type": "success"
     }
