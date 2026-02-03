@@ -1,42 +1,112 @@
 {
-  "scanDate": "2026-02-03T12:40:29.349Z",
+  "scanDate": "2026-02-03T18:58:37.302Z",
   "urlsScanned": [
     "https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation"
   ],
   "totalApisFound": 0,
   "logs": [
     {
-      "timestamp": "2026-02-03T12:40:05.847Z",
+      "timestamp": "2026-02-03T18:58:16.832Z",
       "message": "Starting PSD2 API Discovery scraper",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T12:40:05.848Z",
+      "timestamp": "2026-02-03T18:58:16.833Z",
       "message": "URLs to scan: https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T12:40:05.848Z",
+      "timestamp": "2026-02-03T18:58:16.833Z",
       "message": "Loaded 0 existing APIs",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T12:40:07.462Z",
+      "timestamp": "2026-02-03T18:58:17.004Z",
       "message": "Starting crawl of https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T12:40:07.469Z",
+      "timestamp": "2026-02-03T18:58:17.010Z",
       "message": "Scanning (depth 0): https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T12:40:21.193Z",
+      "timestamp": "2026-02-03T18:58:29.702Z",
+      "message": "  Page title: \"Documentation\"",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:29.702Z",
+      "message": "  Content length: 3052 chars",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:29.703Z",
+      "message": "  Text sample: \"Documentation html, body { font-family: INGMe, arial, helvetica, sans-serif; height: 100%; margin: 0; padding: 0; } /* eslint-disable prefer-template */ /* eslint-disable func-names */ (function () { const basePath = document.querySelector('base').getAttribute('href'); // send users of old MS Edge versions and IE11 to unsupported browser page if ( (/(Trident.*rv:)|MSIE/i.test(navigator.userAgent) && !!window.MSInputMethodContext && !!document.documentMode) || /Edge\\//i.test(navigator.userAgent) ...\"",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:29.703Z",
+      "message": "  Keyword matches: psd2=0, ais=0, pis=0, caf=0",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:29.703Z",
+      "message": "  No PSD2/AIS/PIS/CAF keywords found on this page",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:29.703Z",
+      "message": "  Found 1 links on page",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:29.704Z",
+      "message": "  Queued 1 new links for crawling",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:29.706Z",
       "message": "Scanning (depth 1): https://developer.ing.com/openbanking/",
       "type": "info"
     },
     {
-      "timestamp": "2026-02-03T12:40:29.349Z",
+      "timestamp": "2026-02-03T18:58:37.274Z",
+      "message": "  Page title: \"Home\"",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:37.274Z",
+      "message": "  Content length: 3049 chars",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:37.274Z",
+      "message": "  Text sample: \"Home html, body { font-family: INGMe, arial, helvetica, sans-serif; height: 100%; margin: 0; padding: 0; } /* eslint-disable prefer-template */ /* eslint-disable func-names */ (function () { const basePath = document.querySelector('base').getAttribute('href'); // send users of old MS Edge versions and IE11 to unsupported browser page if ( (/(Trident.*rv:)|MSIE/i.test(navigator.userAgent) && !!window.MSInputMethodContext && !!document.documentMode) || /Edge\\//i.test(navigator.userAgent) ) { windo...\"",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:37.275Z",
+      "message": "  Keyword matches: psd2=0, ais=0, pis=0, caf=0",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:37.275Z",
+      "message": "  No PSD2/AIS/PIS/CAF keywords found on this page",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:37.275Z",
+      "message": "  Found 1 links on page",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:37.275Z",
+      "message": "  Queued 0 new links for crawling",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-02-03T18:58:37.302Z",
       "message": "Saved 0 APIs to /home/runner/work/APIDiscovery/APIDiscovery/docs/data/apis.json",
       "type": "success"
     }
