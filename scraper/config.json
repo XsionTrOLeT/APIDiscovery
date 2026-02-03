@@ -5,9 +5,9 @@
   "options": {
     "maxDepth": 2,
     "maxPagesPerSite": 30,
-    "timeout": 30000,
-    "waitForSelector": "body",
-    "waitTime": 3000
+    "timeout": 60000,
+    "waitTime": 15000,
+    "minContentLength": 10000
   },
   "keywords": {
     "psd2": ["psd2", "payment services directive", "open banking", "tpp", "third party provider", "aisp", "pisp", "aspsp", "xs2a"],
