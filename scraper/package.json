@@ -1,0 +1,17 @@
+{
+  "name": "psd2-api-scraper",
+  "version": "1.0.0",
+  "description": "Playwright-based scraper for PSD2 banking APIs",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "scrape": "node index.js",
+    "test": "node index.js --urls https://developer.ing.com/openbanking/products"
+  },
+  "dependencies": {
+    "playwright": "^1.41.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
