@@ -294,7 +294,7 @@ function extractLinks(baseUrl, content) {
  * Crawl a single website
  */
 async function crawlSite(browser, startUrl, options) {
-    const { maxDepth, maxPagesPerSite, timeout, waitTime } = options;
+    const { maxDepth, maxPagesPerSite, timeout, waitTime, minContentLength = 10000 } = options;
 
     log(`Starting crawl of ${startUrl}`, 'info');
 
@@ -325,12 +325,36 @@ async function crawlSite(browser, startUrl, options) {
                     waitUntil: 'networkidle'
                 });
 
-                // Wait for dynamic content
-                await page.waitForTimeout(waitTime);
+                // Wait for SPA content to load - poll until content is substantial
+                let content = '';
+                let title = '';
+                const maxWaitTime = waitTime;
+                const pollInterval = 2000;
+                let waited = 0;
 
-                // Get page content and title
-                const content = await page.content();
-                const title = await page.title();
+                while (waited < maxWaitTime) {
+                    await page.waitForTimeout(pollInterval);
+                    waited += pollInterval;
+
+                    content = await page.content();
+                    title = await page.title();
+
+                    // Check if we have substantial content
+                    if (content.length >= minContentLength) {
+                        log(`  Content loaded after ${waited}ms (${content.length} chars)`, 'info');
+                        break;
+                    }
+
+                    log(`  Waiting for content... ${waited}ms (${content.length} chars)`, 'info');
+                }
+
+                // Final content grab
+                content = await page.content();
+                title = await page.title();
+
+                if (content.length < minContentLength) {
+                    log(`  Warning: Content still small after ${maxWaitTime}ms (${content.length} chars)`, 'warning');
+                }
 
                 pagesScanned++;
 
