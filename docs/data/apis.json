@@ -1,6 +1,14 @@
 {
-  "lastUpdated": null,
+  "lastUpdated": "2026-02-03T12:40:29.349Z",
   "totalApis": 0,
-  "scanResults": [],
+  "scanResults": [
+    {
+      "url": "https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
+      "status": "success",
+      "pagesScanned": 2,
+      "apiRelatedPages": [],
+      "apis": []
+    }
+  ],
   "apis": []
 }
