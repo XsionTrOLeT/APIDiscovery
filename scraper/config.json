@@ -11,7 +11,7 @@
   },
   "keywords": {
     "psd2": ["psd2", "payment services directive", "open banking", "tpp", "third party provider", "aisp", "pisp", "aspsp", "xs2a"],
-    "ais": ["account information", "ais", "/accounts/", "/accounts/{", "accountid", "account-id", "balances", "/balances", "transactions", "/transactions", "account data", "read account", "multi-currency accounts"],
+    "ais": ["account information", "ais", "/accounts/", "accountid", "account-id", "balances", "/balances", "transactions", "account data", "read account", "multi-currency accounts"],
     "pis": ["payment initiation", "pis", "/payments/", "/payments/{", "paymentid", "payment-id", "initiate payment", "payment service", "sepa payment", "instant payment", "/periodic-payments/", "/bulk-payments/"],
     "caf": ["confirmation of funds", "caf", "funds confirmation", "available funds", "fund availability", "/funds-confirmations"],
     "api_patterns": ["/v1/", "/v2/", "/v3/", "/api/", "get /", "post /", "put /", "delete /", "patch /", "{accountid}", "{paymentid}", "{resourceid}", "query parameter", "request body", "response body", "http 200", "http 201", "http 400", "http 401", "endpoint"]
