@@ -111,13 +111,11 @@ function analyzePageContent(url, content, title) {
     const textSample = textContent.substring(0, 500);
     log(`  Text sample: "${textSample}..."`, 'info');
 
-    // Count keyword matches
-    const keywordMatches = {
-        psd2: 0,
-        ais: 0,
-        pis: 0,
-        caf: 0
-    };
+    // Count keyword matches - initialize dynamically from config
+    const keywordMatches = {};
+    for (const category of Object.keys(KEYWORDS)) {
+        keywordMatches[category] = 0;
+    }
 
     const foundKeywords = [];
 
@@ -135,35 +133,47 @@ function analyzePageContent(url, content, title) {
     }
 
     // Log keyword matches
-    log(`  Keyword matches: psd2=${keywordMatches.psd2}, ais=${keywordMatches.ais}, pis=${keywordMatches.pis}, caf=${keywordMatches.caf}`, 'info');
+    const matchSummary = Object.entries(keywordMatches).map(([k, v]) => `${k}=${v}`).join(', ');
+    log(`  Keyword matches: ${matchSummary}`, 'info');
     if (foundKeywords.length > 0) {
         log(`  Keywords found: ${foundKeywords.join(', ')}`, 'success');
     } else {
-        log(`  No PSD2/AIS/PIS/CAF keywords found on this page`, 'warning');
+        log(`  No API-related keywords found on this page`, 'warning');
     }
 
-    // Determine API type based on keyword matches
-    const totalMatches = Object.values(keywordMatches).reduce((a, b) => a + b, 0);
+    // Calculate total matches (api_patterns boost the score but don't count alone)
+    const apiTypeMatches = (keywordMatches.psd2 || 0) + (keywordMatches.ais || 0) +
+                          (keywordMatches.pis || 0) + (keywordMatches.caf || 0);
+    const patternMatches = keywordMatches.api_patterns || 0;
 
-    if (totalMatches === 0) {
+    // Need at least some API type keywords OR significant pattern matches
+    if (apiTypeMatches === 0 && patternMatches < 5) {
+        log(`  Not enough matches to qualify as API (apiTypes=${apiTypeMatches}, patterns=${patternMatches})`, 'warning');
         return apis;
     }
 
+    const totalMatches = apiTypeMatches + patternMatches;
+
     // Determine primary API type
     let apiType = 'PSD2';
-    let maxMatches = keywordMatches.psd2;
+    let maxMatches = keywordMatches.psd2 || 0;
 
-    if (keywordMatches.ais > maxMatches) {
+    if ((keywordMatches.ais || 0) > maxMatches) {
         apiType = 'AIS';
         maxMatches = keywordMatches.ais;
     }
-    if (keywordMatches.pis > maxMatches) {
+    if ((keywordMatches.pis || 0) > maxMatches) {
         apiType = 'PIS';
         maxMatches = keywordMatches.pis;
     }
-    if (keywordMatches.caf > maxMatches) {
+    if ((keywordMatches.caf || 0) > maxMatches) {
         apiType = 'CAF';
         maxMatches = keywordMatches.caf;
+    }
+
+    // If only api_patterns matched, label as generic PSD2/API
+    if (apiTypeMatches === 0 && patternMatches >= 5) {
+        apiType = 'PSD2';
     }
 
     // Calculate confidence score
