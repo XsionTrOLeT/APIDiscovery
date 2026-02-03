@@ -154,12 +154,17 @@ async function startScan() {
     try {
         const maxDepth = parseInt(document.getElementById('max-depth').value) || 2;
         const maxPages = parseInt(document.getElementById('max-pages').value) || 30;
+        const useJsRendering = document.getElementById('js-rendering')?.checked ?? true;
 
         addLog('Starting API discovery scan...', 'info');
+        if (useJsRendering) {
+            addLog('JavaScript rendering enabled (for SPA sites)', 'info');
+        }
 
         const discovery = new PSD2APIDiscovery({
             maxDepth: maxDepth,
             maxPages: maxPages,
+            useJsRendering: useJsRendering,
             onProgress: updateProgress,
             onLog: addLog
         });

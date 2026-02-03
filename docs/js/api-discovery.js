@@ -6,11 +6,37 @@
  */
 
 class PSD2APIDiscovery {
-    // CORS proxy options
+    // CORS proxy options (for static HTML pages)
     static CORS_PROXIES = [
         'https://api.allorigins.win/raw?url=',
         'https://corsproxy.io/?',
-        'https://api.codetabs.com/v1/proxy?quest='
+    ];
+
+    // JavaScript rendering proxies (for SPA/dynamic pages)
+    // These services render JavaScript before returning HTML
+    static JS_RENDER_PROXIES = [
+        {
+            name: 'Microlink',
+            // Microlink renders JS and returns page data
+            buildUrl: (url) => `https://api.microlink.io/?url=${encodeURIComponent(url)}&screenshot=false&meta=false`,
+            parseResponse: async (response) => {
+                const json = await response.json();
+                if (json.status === 'success' && json.data) {
+                    // Microlink returns HTML in data.html or we can use data.content
+                    return json.data.html || json.data.content || '';
+                }
+                throw new Error(json.message || 'Microlink failed');
+            }
+        },
+        {
+            name: 'WebScraping.ai',
+            // Free tier available
+            buildUrl: (url) => `https://api.webscraping.ai/html?url=${encodeURIComponent(url)}&js_rendering=true`,
+            parseResponse: async (response) => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.text();
+            }
+        }
     ];
 
     // PSD2 API type definitions
@@ -64,8 +90,10 @@ class PSD2APIDiscovery {
     constructor(options = {}) {
         this.maxDepth = options.maxDepth || 3;
         this.maxPages = options.maxPages || 50;
-        this.timeout = options.timeout || 20000;
+        this.timeout = options.timeout || 30000; // Increased for JS rendering
         this.proxyIndex = 0;
+        this.jsProxyIndex = 0;
+        this.useJsRendering = options.useJsRendering !== false; // Enable by default
         this.onProgress = options.onProgress || (() => {});
         this.onLog = options.onLog || (() => {});
         this.discoveredProducts = new Map();
@@ -215,11 +243,74 @@ class PSD2APIDiscovery {
     }
 
     /**
-     * Fetch a URL using CORS proxy with retry logic
+     * Fetch a URL - tries JS rendering proxies first, then falls back to CORS proxies
      */
-    async fetchWithProxy(url, retryCount = 0) {
-        const maxRetries = PSD2APIDiscovery.CORS_PROXIES.length;
-        const proxyIndex = (this.proxyIndex + retryCount) % maxRetries;
+    async fetchWithProxy(url) {
+        // First, try JavaScript rendering proxies (better for SPAs)
+        if (this.useJsRendering) {
+            for (let i = 0; i < PSD2APIDiscovery.JS_RENDER_PROXIES.length; i++) {
+                const proxy = PSD2APIDiscovery.JS_RENDER_PROXIES[i];
+                try {
+                    this.onLog(`Trying ${proxy.name} renderer...`, 'info');
+                    const html = await this.fetchWithJsProxy(url, proxy);
+                    if (html && html.length > 500) { // Ensure we got meaningful content
+                        this.onLog(`${proxy.name} succeeded`, 'success');
+                        return html;
+                    }
+                } catch (error) {
+                    this.onLog(`${proxy.name} failed: ${error.message}`, 'info');
+                }
+            }
+        }
+
+        // Fall back to regular CORS proxies
+        for (let i = 0; i < PSD2APIDiscovery.CORS_PROXIES.length; i++) {
+            try {
+                const html = await this.fetchWithCorsProxy(url, i);
+                if (html && html.length > 100) {
+                    return html;
+                }
+            } catch (error) {
+                this.onLog(`CORS proxy ${i + 1} failed: ${error.message}`, 'info');
+            }
+        }
+
+        throw new Error('All proxies failed');
+    }
+
+    /**
+     * Fetch using a JavaScript rendering proxy
+     */
+    async fetchWithJsProxy(url, proxy) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+        try {
+            const proxyUrl = proxy.buildUrl(url);
+            const response = await fetch(proxyUrl, {
+                signal: controller.signal,
+                headers: {
+                    'Accept': 'application/json,text/html,*/*'
+                }
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            return await proxy.parseResponse(response);
+        } catch (error) {
+            clearTimeout(timeoutId);
+            throw error;
+        }
+    }
+
+    /**
+     * Fetch using a CORS proxy
+     */
+    async fetchWithCorsProxy(url, proxyIndex) {
         const proxy = PSD2APIDiscovery.CORS_PROXIES[proxyIndex];
         const proxyUrl = proxy + encodeURIComponent(url);
 
@@ -244,13 +335,6 @@ class PSD2APIDiscovery {
             return await response.text();
         } catch (error) {
             clearTimeout(timeoutId);
-
-            // Try next proxy
-            if (retryCount < maxRetries - 1) {
-                this.onLog(`Proxy failed, trying alternative...`, 'info');
-                return this.fetchWithProxy(url, retryCount + 1);
-            }
-
             throw error;
         }
     }
