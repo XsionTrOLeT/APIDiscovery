@@ -39,9 +39,17 @@ jobs:
         working-directory: scraper
         run: npx playwright install-deps chromium
 
-      - name: Run scraper
+      - name: Install Xvfb for headed browser
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
+      - name: Run scraper with virtual display
         working-directory: scraper
         run: |
+          # Start virtual display
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1920x1080x24 &
+          sleep 2
+
           if [ -n "${{ github.event.inputs.urls }}" ]; then
             node index.js --urls "${{ github.event.inputs.urls }}"
           else
