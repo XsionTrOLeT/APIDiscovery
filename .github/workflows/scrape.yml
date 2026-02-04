@@ -35,9 +35,9 @@ jobs:
         working-directory: scraper
         run: npm ci
 
-      - name: Install Playwright browsers
+      - name: Install Playwright dependencies
         working-directory: scraper
-        run: npx playwright install firefox --with-deps
+        run: npx playwright install-deps chromium
 
       - name: Run scraper
         working-directory: scraper
