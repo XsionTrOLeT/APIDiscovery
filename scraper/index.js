@@ -28,6 +28,9 @@ const KEYWORDS = config.keywords;
 // Store scan logs
 const scanLogs = [];
 
+// Store raw content captured from each page for debugging
+const capturedContent = [];
+
 function log(message, type = 'info') {
     const timestamp = new Date().toISOString();
     const logEntry = { timestamp, message, type };
@@ -426,6 +429,15 @@ async function crawlSite(browser, startUrl, options) {
 
                 pagesScanned++;
 
+                // Store raw captured content for debugging
+                capturedContent.push({
+                    url: url,
+                    title: title,
+                    contentLength: content.length,
+                    rawContent: content.substring(0, 5000), // Store first 5000 chars
+                    timestamp: new Date().toISOString()
+                });
+
                 // Analyze for APIs
                 const foundApis = analyzePageContent(url, content, title);
                 if (foundApis.length > 0) {
@@ -581,6 +593,7 @@ async function scrape() {
         scanDate: new Date().toISOString(),
         urlsScanned: urls,
         totalApisFound: allApis.length,
+        capturedContent: capturedContent,
         logs: scanLogs
     };
 
