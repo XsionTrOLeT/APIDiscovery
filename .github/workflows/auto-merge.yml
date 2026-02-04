@@ -1,0 +1,42 @@
+name: Auto-merge Claude branches
+
+on:
+  push:
+    branches:
+      - 'claude/**'
+
+permissions:
+  contents: write
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Merge to main
+        run: |
+          # Get the current branch name
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          echo "Merging branch: $BRANCH_NAME to main"
+
+          # Fetch and checkout main
+          git fetch origin main
+          git checkout main
+
+          # Merge the claude branch
+          git merge --no-ff "$BRANCH_NAME" -m "Auto-merge $BRANCH_NAME to main"
+
+          # Push to main
+          git push origin main
+
+          echo "Successfully merged $BRANCH_NAME to main"
