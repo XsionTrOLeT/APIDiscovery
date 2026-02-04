@@ -1,11 +1,9 @@
 {
   "urls": [
-    "https://doc.bunq.com/",
-    "https://developer.abnamro.com/api-products",
-    "https://developer.starlingbank.com/docs"
+    "https://publicapis.io/category/finance"
   ],
   "options": {
-    "maxDepth": 2,
+    "maxDepth": 1,
     "maxPagesPerSite": 30,
     "timeout": 60000,
     "waitTime": 15000,
