@@ -506,11 +506,21 @@ async function scrape() {
         } catch {}
     }
 
-    // Use system Chrome in HEADED mode with Xvfb (truly undetectable)
+    // Use system Chrome with maximum anti-detection measures
     const browser = await chromium.launch({
         channel: 'chrome',
         headless: false,  // Run headed - Xvfb provides virtual display
-        args: ['--disable-blink-features=AutomationControlled']
+        args: [
+            '--no-sandbox',
+            '--disable-blink-features=AutomationControlled',
+            '--disable-features=IsolateOrigins,site-per-process',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--disable-gpu',
+            '--window-size=1920,1080',
+            '--start-maximized'
+        ],
+        ignoreDefaultArgs: ['--enable-automation']
     });
 
     const allApis = [];

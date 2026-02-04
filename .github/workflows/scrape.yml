@@ -42,13 +42,21 @@ jobs:
       - name: Install Xvfb for headed browser
         run: sudo apt-get update && sudo apt-get install -y xvfb
 
+      - name: Verify Chrome installation
+        run: |
+          which google-chrome || which google-chrome-stable || echo "Chrome not found in PATH"
+          google-chrome --version || google-chrome-stable --version || echo "Could not get Chrome version"
+
       - name: Run scraper with virtual display
         working-directory: scraper
         run: |
           # Start virtual display
+          Xvfb :99 -screen 0 1920x1080x24 -ac &
           export DISPLAY=:99
-          Xvfb :99 -screen 0 1920x1080x24 &
-          sleep 2
+          sleep 3
+
+          # Verify display is working
+          echo "DISPLAY=$DISPLAY"
 
           if [ -n "${{ github.event.inputs.urls }}" ]; then
             node index.js --urls "${{ github.event.inputs.urls }}"
@@ -56,6 +64,7 @@ jobs:
             node index.js
           fi
         env:
+          DISPLAY: ':99'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check for changes
