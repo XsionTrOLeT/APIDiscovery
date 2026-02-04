@@ -506,10 +506,11 @@ async function scrape() {
         } catch {}
     }
 
-    // Use system Chrome instead of bundled Chromium (harder to detect as bot)
+    // Use system Chrome in HEADED mode with Xvfb (truly undetectable)
     const browser = await chromium.launch({
         channel: 'chrome',
-        headless: true
+        headless: false,  // Run headed - Xvfb provides virtual display
+        args: ['--disable-blink-features=AutomationControlled']
     });
 
     const allApis = [];
