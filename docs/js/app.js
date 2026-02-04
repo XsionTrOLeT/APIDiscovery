@@ -36,23 +36,29 @@ async function loadData() {
         scanResults = await response.json();
         allApis = scanResults.apis || [];
 
-        // Load scan logs
+        // Load scan logs and captured content
+        let capturedContent = [];
         try {
             const logResponse = await fetch(LOG_URL + '?t=' + Date.now());
             if (logResponse.ok) {
                 const logData = await logResponse.json();
                 scanLogs = logData.logs || [];
+                capturedContent = logData.capturedContent || [];
             }
         } catch (e) {
             console.warn('Could not load scan logs:', e);
             scanLogs = [];
         }
 
+        // Display raw captured content for debugging
+        displayRawContent(capturedContent);
+
         // Update last updated time
         updateLastUpdated(scanResults.lastUpdated);
 
-        // Show results or empty state
-        if (allApis.length > 0) {
+        // Always show results section if we have scan data (to show debug info)
+        // Show empty state only if no scan has been run at all
+        if (scanResults.lastUpdated || capturedContent.length > 0) {
             displayResults();
         } else {
             showEmpty();
@@ -308,6 +314,54 @@ function toggleLogs() {
         logsContent.classList.add('collapsed');
         toggleBtn.textContent = 'Show Logs';
     }
+}
+
+/**
+ * Toggle raw content visibility
+ */
+function toggleRawContent() {
+    const rawContent = document.getElementById('raw-content-container');
+    const toggleBtn = document.getElementById('toggle-raw-btn');
+
+    if (rawContent.classList.contains('collapsed')) {
+        rawContent.classList.remove('collapsed');
+        toggleBtn.textContent = 'Hide Raw Content';
+    } else {
+        rawContent.classList.add('collapsed');
+        toggleBtn.textContent = 'Show Raw Content';
+    }
+}
+
+/**
+ * Display raw captured content for debugging
+ */
+function displayRawContent(capturedContent) {
+    const container = document.getElementById('raw-content-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (!capturedContent || capturedContent.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-secondary); padding: 20px;">No raw content captured yet. Run the scraper to see captured content.</p>';
+        return;
+    }
+
+    capturedContent.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'raw-content-item';
+
+        div.innerHTML = `
+            <h4>Page ${index + 1}: ${escapeHtml(item.url)}</h4>
+            <div class="content-meta">
+                <strong>Title:</strong> ${escapeHtml(item.title || '(no title)')}<br>
+                <strong>Content Length:</strong> ${item.contentLength} chars<br>
+                <strong>Captured:</strong> ${new Date(item.timestamp).toLocaleString()}
+            </div>
+            <pre>${escapeHtml(item.rawContent || '(no content)')}</pre>
+        `;
+
+        container.appendChild(div);
+    });
 }
 
 /**
