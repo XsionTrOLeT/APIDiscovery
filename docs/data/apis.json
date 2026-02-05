@@ -1,14 +1,939 @@
 {
-  "lastUpdated": "2026-02-04T12:16:48.477Z",
-  "totalApis": 0,
+  "lastUpdated": "2026-02-05T06:03:09.836Z",
+  "totalApis": 30,
   "scanResults": [
     {
-      "url": "https://developer.ing.com/openbanking/products/b6d5093d-626e-41e9-b9e8-ff287bbe2c07/versions/8a25e023-7ea2-4626-b4c9-b1747b7825ca/documentation",
+      "url": "https://publicapis.io/category/finance",
       "status": "success",
-      "pagesScanned": 2,
-      "apiRelatedPages": [],
-      "apis": []
+      "pagesScanned": 30,
+      "apiRelatedPages": [
+        "https://publicapis.io/category/finance",
+        "https://publicapis.io/",
+        "https://publicapis.io/apis",
+        "https://publicapis.io/blog",
+        "https://publicapis.io/collections",
+        "https://publicapis.io/sponsors",
+        "https://publicapis.io/submit",
+        "https://publicapis.io/category/development",
+        "https://publicapis.io/category/data-access",
+        "https://publicapis.io/category/cryptocurrency",
+        "https://publicapis.io/category/games-and-comics",
+        "https://publicapis.io/category/geocoding",
+        "https://publicapis.io/category/open-data",
+        "https://publicapis.io/category/transportation",
+        "https://publicapis.io/category/music",
+        "https://publicapis.io/category/media",
+        "https://publicapis.io/category/social",
+        "https://publicapis.io/category/sports-and-fitness",
+        "https://publicapis.io/category/weather",
+        "https://publicapis.io/category/shopping",
+        "https://publicapis.io/category/food-and-drink",
+        "https://publicapis.io/category/health",
+        "https://publicapis.io/category/calendar",
+        "https://publicapis.io/category/government",
+        "https://publicapis.io/category/video",
+        "https://publicapis.io/category/science",
+        "https://publicapis.io/category/jobs",
+        "https://publicapis.io/category/animals",
+        "https://publicapis.io/category/machine-learning",
+        "https://publicapis.io/category/documents-and-productivity"
+      ],
+      "apis": [
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/finance",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pis",
+            "caf"
+          ],
+          "discovered_at": "2026-02-05T05:43:13.306Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T05:43:55.022Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/apis",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T05:44:26.818Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/blog",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T05:45:08.588Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/collections",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.45,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T05:45:49.599Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/sponsors",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.7,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T05:46:30.641Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/submit",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.6,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T05:47:11.675Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/development",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pisp",
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:47:53.466Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/data-access",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.85,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T05:48:35.070Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/cryptocurrency",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "transactions",
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:49:16.667Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/games-and-comics",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:49:58.389Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/geocoding",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:50:40.004Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/open-data",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pis",
+            "query parameter",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:51:21.596Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/transportation",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "ais",
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:52:03.265Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/music",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.85,
+          "keywords_found": [
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:52:44.760Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/media",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:53:26.322Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/social",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "ais",
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:54:08.073Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/sports-and-fitness",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pisp",
+            "ais",
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:54:49.583Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/weather",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:55:31.127Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/shopping",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "account information",
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T05:56:12.965Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/food-and-drink",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.8,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T05:56:54.757Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/health",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.95,
+          "keywords_found": [
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:57:36.323Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/calendar",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.75,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T05:58:17.847Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/government",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "ais",
+            "pis",
+            "caf"
+          ],
+          "discovered_at": "2026-02-05T05:58:59.464Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/video",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pis",
+            "/v2/",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T05:59:41.037Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/science",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.85,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T06:00:22.618Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/jobs",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.8,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T06:01:04.166Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/animals",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.85,
+          "keywords_found": [
+            "pis",
+            "endpoint"
+          ],
+          "discovered_at": "2026-02-05T06:01:45.753Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/machine-learning",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 1,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T06:02:27.506Z"
+        },
+        {
+          "name": "Publicapis PIS API",
+          "api_type": "PIS",
+          "url": "https://publicapis.io",
+          "source_page": "https://publicapis.io/category/documents-and-productivity",
+          "description": "PIS API from Publicapis - PSD2 compliant banking API",
+          "documentation_url": null,
+          "swagger_url": null,
+          "confidence_score": 0.85,
+          "keywords_found": [
+            "pis"
+          ],
+          "discovered_at": "2026-02-05T06:03:09.637Z"
+        }
+      ]
     }
   ],
-  "apis": []
+  "apis": [
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/finance",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pis",
+        "caf"
+      ],
+      "discovered_at": "2026-02-05T05:43:13.306Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T05:43:55.022Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/apis",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T05:44:26.818Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/blog",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T05:45:08.588Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/development",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pisp",
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:47:53.466Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/cryptocurrency",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "transactions",
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:49:16.667Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/games-and-comics",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:49:58.389Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/geocoding",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:50:40.004Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/open-data",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pis",
+        "query parameter",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:51:21.596Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/transportation",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "ais",
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:52:03.265Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/media",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:53:26.322Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/social",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "ais",
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:54:08.073Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/sports-and-fitness",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pisp",
+        "ais",
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:54:49.583Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/weather",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:55:31.127Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/shopping",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "account information",
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T05:56:12.965Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/government",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "ais",
+        "pis",
+        "caf"
+      ],
+      "discovered_at": "2026-02-05T05:58:59.464Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/video",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pis",
+        "/v2/",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:59:41.037Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/machine-learning",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 1,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T06:02:27.506Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/health",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.95,
+      "keywords_found": [
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:57:36.323Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/data-access",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.85,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T05:48:35.070Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/music",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.85,
+      "keywords_found": [
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T05:52:44.760Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/science",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.85,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T06:00:22.618Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/animals",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.85,
+      "keywords_found": [
+        "pis",
+        "endpoint"
+      ],
+      "discovered_at": "2026-02-05T06:01:45.753Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/documents-and-productivity",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.85,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T06:03:09.637Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/food-and-drink",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.8,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T05:56:54.757Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/jobs",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.8,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T06:01:04.166Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/category/calendar",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.75,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T05:58:17.847Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/sponsors",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.7,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T05:46:30.641Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/submit",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.6,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T05:47:11.675Z"
+    },
+    {
+      "name": "Publicapis PIS API",
+      "api_type": "PIS",
+      "url": "https://publicapis.io",
+      "source_page": "https://publicapis.io/collections",
+      "description": "PIS API from Publicapis - PSD2 compliant banking API",
+      "documentation_url": null,
+      "swagger_url": null,
+      "confidence_score": 0.45,
+      "keywords_found": [
+        "pis"
+      ],
+      "discovered_at": "2026-02-05T05:45:49.599Z"
+    }
+  ]
 }
